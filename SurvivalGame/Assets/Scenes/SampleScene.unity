@@ -162,13 +162,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 345368523}
+  - component: {fileID: 345368524}
   - component: {fileID: 345368522}
   - component: {fileID: 345368521}
   - component: {fileID: 345368520}
-  - component: {fileID: 345368524}
   m_Layer: 0
   m_Name: Tree
-  m_TagString: Untagged
+  m_TagString: Attackable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -258,10 +258,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 345368519}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74448d7c4934f714c9ead3db9ad18a83, type: 3}
+  m_Script: {fileID: 11500000, guid: dd76ddc3cc904ac4e9d100ab752723f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitPoints: 0
+  treeHP: 10
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -643,6 +643,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackTime: 3
   attackRange: 1
+  attackDamage: 2
   playerCamera: {fileID: 963194228}
   playerMask:
     serializedVersion: 2

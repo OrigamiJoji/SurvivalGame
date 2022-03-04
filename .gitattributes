@@ -1,0 +1,3 @@
+# Hides third-party .shader files by TextMeshPro from the repository's language distribution
+*.shader linguist-vendored=true
+*.cginc linguist-vendored=true

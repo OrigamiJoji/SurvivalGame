@@ -4,35 +4,39 @@ using UnityEngine;
 
 public sealed class PlayerUse : MonoBehaviour
 {
-    [HideInInspector] public ITool equippedTool;
+    private PlayerInventory _playerInventory;
+    [SerializeField] private Transform _playerCamera;
+    [SerializeField] private LayerMask _playerMask;
 
-    [SerializeField] private Transform playerCamera;
-    [SerializeField] private LayerMask playerMask;
-    [SerializeField] private double timeToAttack;
-    [SerializeField] private bool canAttack;
+    [field: SerializeField] public double TimeToAttack { get; private set; }
+    [field: SerializeField] public bool CanAttack { get; private set; }
 
+    private void Awake() {
+        _playerInventory = gameObject.GetComponent<PlayerInventory>();
+    }
     private void Start() {
-        playerMask = ~playerMask;
-        equippedTool = new Fists();
+        _playerMask = ~_playerMask;
+        _playerInventory.EquippedItem = new Fists();
     }
 
     private void Update() {
-        if(timeToAttack > 0) {
-            timeToAttack -= Time.deltaTime;
+        if(TimeToAttack > 0) {
+            TimeToAttack -= Time.deltaTime;
         }
-        else { canAttack = true; }
+        else { CanAttack = true; }
 
 
-        if(Input.GetMouseButton(0) && canAttack) {
-            timeToAttack = equippedTool.AttackSpeed;
-            canAttack = false;
-            if(Physics.Raycast(playerCamera.position, playerCamera.forward, out RaycastHit hit, equippedTool.Range, playerMask)) {
-                Debug.DrawRay(playerCamera.position, playerCamera.forward, Color.green, 1);
+        if(Input.GetMouseButton(0) && CanAttack) {
+            TimeToAttack = _playerInventory.EquippedItemToolStats.AttackSpeed;
+            CanAttack = false;
+            if(Physics.Raycast(_playerCamera.position, _playerCamera.forward, out RaycastHit hit, _playerInventory.EquippedItemToolStats.Range, _playerMask)) {
+                Debug.DrawRay(_playerCamera.position, _playerCamera.forward, Color.green, 1);
                 GameObject objectHit = hit.collider.gameObject;
 
-                if(objectHit.CompareTag("Attackable")) { // If attackable, do damage
+                if(objectHit.CompareTag("Attackable")) { 
+                    // if Attackable, do damage.
                     Attackable objectAttackable = objectHit.GetComponent<Attackable>();
-                    objectAttackable.TakeDamage(equippedTool.Damage);
+                    objectAttackable.TakeDamage(_playerInventory.EquippedItemToolStats.Damage);
                 }
             }
         }

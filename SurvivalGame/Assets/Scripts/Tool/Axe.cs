@@ -1,18 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Axe : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+public class Axe : Item, ITool {
+    public string ToolName { get; private set; }
+    public float Durability { get; set; }
+    public float Damage { get; private set; }
+    public float Range { get; private set; }
+    public double AttackSpeed { get; private set; }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public Axe() {
+        ToolName = "Fists";
+        Durability = 100;
+        Damage = 5;
+        Range = 6;
+        AttackSpeed = 0.8f;
     }
 }

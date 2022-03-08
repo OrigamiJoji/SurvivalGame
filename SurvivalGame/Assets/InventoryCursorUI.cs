@@ -16,9 +16,10 @@ public class InventoryCursorUI : MonoBehaviour
     }
 
     private void Update() {
-        if (_playerInventory.GetImage() != null) {
-            _image = _playerInventory.GetImage();
-        }
+        // if (_playerInventory.GetImage() != null) {
+        //     _image = _playerInventory.GetImage();
+        // }
+        gameObject.transform.position = Input.mousePosition;
         _quantityText.text = _playerInventory.GetQuantity().ToString();
     }
 

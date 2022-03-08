@@ -10,6 +10,5 @@ public abstract class Item {
 
     public Item() {
         MaxStackSize = 20;
-
     }
 }

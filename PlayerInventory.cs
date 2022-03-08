@@ -56,12 +56,7 @@ public class PlayerInventory : MonoBehaviour {
             inventorySlot.Item = null;
         }
     }
-    private void StoreInProperSlot(InventorySlot inventorySlot) {
-        var column = inventorySlot.Position % _inventory.GetLength(1);
-        var row = Mathf.FloorToInt(inventorySlot.Position / _inventory.GetLength(1));
-        _inventory[row, column] = inventorySlot;
-        Debug.Log($"Item #{inventorySlot.Position} is in position #[{row}, {column}] and contains {inventorySlot.Item}. A total of {InventorySlot.TotalSlots}");
-    }
+
 
     public void GrabItems(InventorySlot inventorySlot) {
         if (HeldItem.Item.Equals(null)) {
@@ -180,12 +175,7 @@ public class PlayerInventory : MonoBehaviour {
         inventorySlot.Quantity -= half;
     }
 
-    public void SwapItems(InventorySlot inventorySlot) {
-        var tempSlot = inventorySlot;
-        inventorySlot.Item = HeldItem.Item;
-        inventorySlot.Quantity = HeldItem.Quantity;
-        HeldItem.Item = tempSlot.Item;
-        HeldItem.Quantity = tempSlot.Quantity;
+
     private void SwapItems(InventorySlot inventorySlot) {
         if (!HeldItem.Item.Equals(null)) {
             var tempSlot = inventorySlot;
@@ -224,6 +214,14 @@ public class PlayerInventory : MonoBehaviour {
         // Generate all inventory slots
         for (int i = _inventory.GetLength(1) * _inventory.GetLength(0); i > 0; i--) {
             StoreInProperSlot(new InventorySlot());
+
+
+        private void StoreInProperSlot(InventorySlot inventorySlot) {
+        var column = inventorySlot.Position % _inventory.GetLength(1);
+        var row = Mathf.FloorToInt(inventorySlot.Position / _inventory.GetLength(1));
+        _inventory[row, column] = inventorySlot;
+        Debug.Log($"Item #{inventorySlot.Position} is in position #[{row}, {column}] and contains {inventorySlot.Item}. A total of {InventorySlot.TotalSlots}");
+    }
     #endregion Functions
 
     /* check if items in hand can carry items picked up, else pickup differece

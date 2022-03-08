@@ -8,6 +8,7 @@ public class Axe : Item, ITool {
     public double AttackSpeed { get; private set; }
 
     public Axe() {
+        Icon = ImageHandler.Instance.GetIcon(this.GetType().Name.ToString());
         ToolName = "Fists";
         Durability = 100;
         Damage = 5;

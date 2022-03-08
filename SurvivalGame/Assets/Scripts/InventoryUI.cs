@@ -11,17 +11,14 @@ public class InventoryUI : MonoBehaviour, IPointerClickHandler {
     [SerializeField] private int _buttonPositionY;
 
     private Text _quantityText;
+    private Image _image;
     private PlayerInventory _playerInventory;
 
 
     private void Awake() {
         _playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
         _quantityText = gameObject.GetComponentInChildren<Text>();
-    }
-
-    private void InteractWithInventory() {
-        
-
+        _image = gameObject.GetComponentInChildren<Image>();
     }
 
     public void OnPointerClick(PointerEventData eventData) {
@@ -44,6 +41,9 @@ public class InventoryUI : MonoBehaviour, IPointerClickHandler {
     }
 
     private void Update() {
+        if (_playerInventory.GetImage(_buttonPositionX, _buttonPositionY) != null) {
+            _image = _playerInventory.GetImage(_buttonPositionX, _buttonPositionY);
+        }
         _quantityText.text = _playerInventory.GetQuantity(_buttonPositionX, _buttonPositionY).ToString();
     }
 

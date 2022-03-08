@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime;
+using UnityEngine.UI;
 
 public class PlayerInventory : MonoBehaviour {
 
@@ -41,8 +42,8 @@ public class PlayerInventory : MonoBehaviour {
 
     [System.Serializable]
     public class InventorySlot : Slot {
-        public int Position { get; private set; }
-        public static int TotalSlots { get; private set; }
+        public int Position { get; set; }
+        public static int TotalSlots { get; set; }
 
         public InventorySlot() {
             Item = null;
@@ -50,28 +51,23 @@ public class PlayerInventory : MonoBehaviour {
             TotalSlots++;
         }
     }
-    private void GenerateSlots(InventorySlot inventorySlot) {
-        _totalSlots = _inventory.GetLength(1) * _inventory.GetLength(0);
+
+    private void GenerateSlots() {
         for (int i = _totalSlots; i > 0; i--) {
+            InventorySlot inventorySlot = new InventorySlot();
             var column = inventorySlot.Position % _inventory.GetLength(1);
             var row = Mathf.FloorToInt(inventorySlot.Position / _inventory.GetLength(1));
             _inventory[row, column] = inventorySlot;
-            Debug.Log($"Item #{inventorySlot.Position} is in position #[{row}, {column}] and contains {inventorySlot.Item}. A total of {InventorySlot.TotalSlots}");
+            Debug.Log($"Item #{inventorySlot.Position} is in position #[{row}, {column}] and contains {inventorySlot.Item}. A total of {InventorySlot.TotalSlots} slots exist");
         }
     }
     #endregion Slot Class
 
     private void Start() {
-        GenerateSlots(new InventorySlot());
+        _totalSlots = _inventory.GetLength(1) * _inventory.GetLength(0);
+        GenerateSlots();
+        FindSlot(0, 1).Item = new Axe();
     }
-
-
-
-
-
-
-
-
 
 
     private void ClearSlot(Slot slot) {
@@ -83,48 +79,89 @@ public class PlayerInventory : MonoBehaviour {
         if (inventorySlot.Quantity.Equals(0)) {
             inventorySlot.Item = null;
         }
-        if(_heldItem.Quantity.Equals(0)) {
+        if (_heldItem.Quantity.Equals(0)) {
             HeldItem.Item = null;
         }
     }
 
-    private void CheckQuantity(Slot inventorySlot) {
-        if(HeldItem.Item.MaxStackSize > inventorySlot.Item.MaxStackSize) {
-
+    private int ItemPickupRemainder(InventorySlot inventorySlot) {
+        var itemsInHand = HeldItem.Quantity;
+        var limit = HeldItem.Item.MaxStackSize;
+        var itemsInSlot = inventorySlot.Quantity;
+        if (itemsInHand + itemsInSlot <= limit) {
+            // return 0 if items in hand and slot within hand max
+            return 0;
+        }
+        else {
+            // return items needing to be subtracted from slot to equal the max
+            return limit - itemsInHand;
         }
     }
 
-    private bool CanItemsBePickedUp() {
-        return true;
-    }
-
-    private bool CanItemsBePlaced() {
-        return true;
-    }
-
-
-    private void GrabItems(InventorySlot inventorySlot) {
-        HeldItem.Item = inventorySlot.Item;
-        HeldItem.Quantity = inventorySlot.Quantity;
-        ClearSlot(inventorySlot);
-    }
-
-    private void StoreHalf(InventorySlot inventorySlot) {
-        if (inventorySlot.Item.Equals(null)) {
-            inventorySlot.Item = _heldItem.Item;
+    private int ItemPlaceRemainder(InventorySlot inventorySlot) {
+        var itemsInHand = HeldItem.Quantity; // 45
+        var limit = inventorySlot.Item.MaxStackSize; //64
+        var itemsInSlot = inventorySlot.Quantity; // 25
+        if (itemsInHand + itemsInSlot <= limit) {
+            // return 0 if items in slot and hand are within slot max
+            return 0;
         }
-        var half = HeldItem.Quantity / 2;
-        inventorySlot.Quantity += half;
-        HeldItem.Quantity -= half;
-    }
-
-    private void TakeHalf(InventorySlot inventorySlot) {
-        var half = inventorySlot.Quantity / 2;
-        HeldItem.Quantity += half;
-        inventorySlot.Quantity -= half;
+        else {
+            // return items needing to be subtracted from hand to equal the max
+            return limit - itemsInSlot;
+        }
     }
 
 
+    public void OnLeftClick(int x, int y) {
+        var currentSlot = FindSlot(x, y);
+
+        if (HeldItem.Item.Equals(null)) { //if no held item
+            SwapItems(currentSlot);
+        }
+        else {
+            if (currentSlot.Item.Equals(null)) { //if no items in slot
+                SwapItems(currentSlot);
+            }
+            else {
+                if (currentSlot.Item.Equals(HeldItem.Item)) { //if held item is same as slot item
+                    //if max slot
+                    //else max
+                }
+                else { //if held item is not same as slot item
+                    SwapItems(currentSlot);
+                }
+            }
+        }
+    }
+
+    public void OnRightClick(int x, int y) {
+        var currentSlot = FindSlot(x, y);
+        if (HeldItem.Item.Equals(null)) {
+
+        }
+        else if (HeldItem.Item.Equals(currentSlot.Item)) {
+        }
+    }
+
+    public int GetQuantity(int x, int y) {
+        return _inventory[x, y].Quantity;
+    }
+    public int GetQuantity() {
+        return HeldItem.Quantity;
+    }
+
+    public InventorySlot FindSlot(int x, int y) {
+        return _inventory[x, y];
+    }
+
+    public Image GetImage(int x, int y) {
+        return _inventory[x, y].Item.Icon;
+    }
+    public Image GetImage() {
+        return HeldItem.Item.Icon;
+    }
+    
     private void SwapItems(InventorySlot inventorySlot) {
         var tempSlot = inventorySlot;
         inventorySlot.Item = HeldItem.Item;
@@ -133,104 +170,56 @@ public class PlayerInventory : MonoBehaviour {
         HeldItem.Quantity = tempSlot.Quantity;
     }
 
-
-    private void AddSingleItem(InventorySlot inventorySlot) {
-        if (HeldItem.Quantity > 0) {
-            inventorySlot.Quantity += 1;
-            HeldItem.Quantity -= 1;
-        }
-        else {
-            ClearSlot(HeldItem);
-        }
-    }
-
-    private void RemoveSingleItem(InventorySlot inventorySlot) {
-        if (inventorySlot.Quantity > 0) {
-            inventorySlot.Quantity -= 1;
-            HeldItem.Quantity += 1;
-        }
-    }
-
-    /* check if items in hand can carry items picked up, else pickup differece
-     * check if items in hand can be placed
-     * items in hand max should be equal to the max amount that can be stored of that item
-     * 
-     * on click left
-     * if items held and items slot, swap items
-     * if items held and no items slot, place items
-     * if no items held and items in click, swap items
-     * if no items held and no items slot, swap items
-     * 
-     * on click right
-     * if items held and items slot: if same item, drop half
-     * else swap
-     * if no items held and items slot, pickup half
-     * if items held and items slot, swap
-     * if no items held and no items slot, swap
-     * 
-     * 
-     */
-
-
-    public void OnLeftClick(int x, int y) {
-        var currentSlot = FindSlot(x, y);
-
-        if (HeldItem.Item.Equals(null)) {
-            //if no item held
-            GrabItems(currentSlot);
-        }
-        else {
-            //if item is held
-            SwapItems(currentSlot);
-        }
-
-    }
-
-    public void OnRightClick(int x, int y) {
-        var currentSlot = FindSlot(x, y);
-        if (HeldItem.Item.Equals(null)) {
-            //If no item is held
-            if (currentSlot.Item.Equals(null)) {
-                //if no item in slot
-                StoreHalf(currentSlot);
-            }
-            else {
-                // if item is in slot
-                TakeHalf(currentSlot);
-            }
-        }
-        else if (_heldItem.Item.Equals(currentSlot.Item)) {
-            //if holding the same item and right click
-        }
-    }
-
-    public int GetQuantity(int x, int y) {
-        return _inventory[x, y].Quantity;
-    }
-
-    public InventorySlot FindSlot(int x, int y) {
-        return _inventory[x, y];
-    }
-
-    public Sprite GetImage(int x, int y) {
-        return null;
-    }
 }
 
 
 // To store item objects in an inventory array and return each item's specific properties.
 
-/*
- * Incase I need it later
+/* check if items in hand can carry items picked up, else pickup differece
+ * check if items in hand can be placed
+ * items in hand max should be equal to the max amount that can be stored of that item
  * 
-static PlayerInventory _instance;
-public static PlayerInventory Instance {
-    get {
-        if (_instance == null) {
-            _instance = FindObjectOfType<PlayerInventory>();
-        }
-        return _instance;
+ * on click left
+ * if items held and items slot, swap items
+ * if items held and no items slot, place items
+ * if no items held and items in click, swap items
+ * if no items held and no items slot, swap items
+ * 
+ * on click right
+ * if items held and items slot: if same item, drop half
+ * else swap
+ * if no items held and items slot, pickup half
+ * if items held and items slot, swap
+ * if no items held and no items slot, swap
+ * 
+ * 
+ * 
+ *     private int ItemPickupRemainder(InventorySlot inventorySlot) {
+    var itemsInHand = HeldItem.Quantity;
+    var limit = HeldItem.Item.MaxStackSize;
+    var itemsInSlot = inventorySlot.Quantity;
+    if (itemsInHand + itemsInSlot <= limit) {
+        // return 0 if items in hand and slot within hand max
+        return 0;
+    }
+    else {
+        // return items needing to be subtracted from slot to equal the max
+        return limit - itemsInHand;
     }
 }
-*/
+
+private int ItemPlaceRemainder(InventorySlot inventorySlot) {
+    var itemsInHand = HeldItem.Quantity; // 45
+    var limit = inventorySlot.Item.MaxStackSize; //64
+    var itemsInSlot = inventorySlot.Quantity; // 25
+    if (itemsInHand + itemsInSlot <= limit) {
+        // return 0 if items in slot and hand are within slot max
+        return 0;
+    }
+    else {
+        // return items needing to be subtracted from hand to equal the max
+        return limit - itemsInSlot;
+    }
+}
+ */
 

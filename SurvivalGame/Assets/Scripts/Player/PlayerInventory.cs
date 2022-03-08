@@ -36,7 +36,7 @@ public class PlayerInventory : MonoBehaviour {
 
     [System.Serializable]
     public class InventorySlot : Slot {
-        public int Position { get; set; }
+        public int Position { get; private set; }
         public static int TotalSlots { get; private set; }
 
         public InventorySlot() {
@@ -45,6 +45,11 @@ public class PlayerInventory : MonoBehaviour {
             TotalSlots++;
         }
     }
+
+
+
+
+
 
     private void ClearSlot(Slot slot) {
         slot.Item = null;
@@ -82,6 +87,7 @@ public class PlayerInventory : MonoBehaviour {
         inventorySlot.Quantity -= half;
     }
 
+    #region Complete Functions
     public void SwapItems(InventorySlot inventorySlot) {
         var tempSlot = inventorySlot;
         inventorySlot.Item = HeldItem.Item;
@@ -89,6 +95,11 @@ public class PlayerInventory : MonoBehaviour {
         HeldItem.Item = tempSlot.Item;
         HeldItem.Quantity = tempSlot.Quantity;
     }
+
+
+
+
+    #endregion Complete Functions
 
     public void AddSingleItem(InventorySlot inventorySlot) {
         if (HeldItem.Quantity > 0) {

@@ -50,7 +50,7 @@ public class PlayerInventory : MonoBehaviour {
         slot.Item = null;
         slot.Quantity = 0;
     }
-<<<<<<< Updated upstream
+
     private void EmptySlot(Slot inventorySlot) {
         if (inventorySlot.Quantity.Equals(0)) {
             inventorySlot.Item = null;
@@ -68,7 +68,7 @@ public class PlayerInventory : MonoBehaviour {
             HeldItem.Item = inventorySlot.Item;
             HeldItem.Quantity = inventorySlot.Quantity;
             ClearSlot(inventorySlot);
-=======
+        }
 
     private void CheckIfSlotEmpty(Slot inventorySlot) {
         if (inventorySlot.Quantity.Equals(0)) {
@@ -117,16 +117,16 @@ public class PlayerInventory : MonoBehaviour {
             HeldItem.Item = inventorySlot.Item;
             HeldItem.Quantity = inventorySlot.Quantity;
             CheckIfSlotEmpty(inventorySlot);
->>>>>>> Stashed changes
+
         }
     }
     // COMPLETE
 
 
-<<<<<<< Updated upstream
+
     public void StoreHalf(InventorySlot inventorySlot) {
         var half = HeldItem.Quantity / 2;
-=======
+
     //if items in hand, store half if slot contains same item
     private void StoreHalf(InventorySlot inventorySlot) {
         // may exceed max
@@ -161,34 +161,31 @@ public class PlayerInventory : MonoBehaviour {
             inventorySlot.Item = HeldItem.Item;
         }
 
->>>>>>> Stashed changes
+
         inventorySlot.Quantity += half;
         HeldItem.Quantity -= half;
     }
 
-<<<<<<< Updated upstream
+
     public void TakeHalf(InventorySlot inventorySlot) {
-=======
+
     private void TakeHalf(InventorySlot inventorySlot) {
         // take half if can hold
         // else take all
         if (ItemPickupRemainder(inventorySlot) > 0) {
             return;
         }
->>>>>>> Stashed changes
         var half = inventorySlot.Quantity / 2;
         HeldItem.Quantity += half;
         inventorySlot.Quantity -= half;
     }
 
-<<<<<<< Updated upstream
     public void SwapItems(InventorySlot inventorySlot) {
         var tempSlot = inventorySlot;
         inventorySlot.Item = HeldItem.Item;
         inventorySlot.Quantity = HeldItem.Quantity;
         HeldItem.Item = tempSlot.Item;
         HeldItem.Quantity = tempSlot.Quantity;
-=======
     private void SwapItems(InventorySlot inventorySlot) {
         if (!HeldItem.Item.Equals(null)) {
             var tempSlot = inventorySlot;
@@ -197,18 +194,14 @@ public class PlayerInventory : MonoBehaviour {
             HeldItem.Item = tempSlot.Item;
             HeldItem.Quantity = tempSlot.Quantity;
         }
->>>>>>> Stashed changes
     }
     // COMPLETE
 
-<<<<<<< Updated upstream
     public void AddSingleItem(InventorySlot inventorySlot) {
         if (HeldItem.Quantity > 0) {
-=======
     private void PlaceSingleItem(InventorySlot inventorySlot) {
         // may exceed slot max
         if (ItemPlaceRemainder(inventorySlot).Equals(0)) {
->>>>>>> Stashed changes
             inventorySlot.Quantity += 1;
             HeldItem.Quantity -= 1;
         }
@@ -218,24 +211,19 @@ public class PlayerInventory : MonoBehaviour {
         CheckIfSlotEmpty(inventorySlot);
     }
 
-<<<<<<< Updated upstream
     public void RemoveSingleItem(InventorySlot inventorySlot) {
-=======
     private void GrabSingleItem(InventorySlot inventorySlot) {
         // may exceed hand max
->>>>>>> Stashed changes
         if (inventorySlot.Quantity > 0) {
             inventorySlot.Quantity -= 1;
             HeldItem.Quantity += 1;
         }
     }
 
-<<<<<<< Updated upstream
     private void Start() {
         // Generate all inventory slots
         for (int i = _inventory.GetLength(1) * _inventory.GetLength(0); i > 0; i--) {
             StoreInProperSlot(new InventorySlot());
-=======
     #endregion Functions
 
     /* check if items in hand can carry items picked up, else pickup differece
@@ -292,7 +280,6 @@ public class PlayerInventory : MonoBehaviour {
         }
         else if (_heldItem.Item.Equals(currentSlot.Item)) {
             //if holding the same item and right click
->>>>>>> Stashed changes
         }
     }
 }

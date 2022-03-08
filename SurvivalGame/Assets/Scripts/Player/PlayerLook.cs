@@ -25,7 +25,7 @@ public sealed class PlayerLook : MonoBehaviour {
 
 
     private void Start() {
-        Cursor.lockState = CursorLockMode.Locked;
+        // Cursor.lockState = CursorLockMode.Locked;
         playerCamera.fieldOfView = defaultFOV;
         LockMouseInput(false);
     }

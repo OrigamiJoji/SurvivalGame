@@ -6,8 +6,14 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private Slider _actionSlider;
+
+    [SerializeField] private Text _targetText;
+    [SerializeField] private Slider _targetHealthSlider;
+    [SerializeField] private Text _targetHealthText;
+
     private PlayerUse _playerUse;
     private PlayerInventory _playerInventory;
+    private Attackable _currentTarget;
 
     private void Awake() {
         var player = GameObject.Find("Player");
@@ -24,6 +30,21 @@ public class UIManager : MonoBehaviour
         else {
             _actionSlider.gameObject.SetActive(false);
         }
+        _currentTarget = _playerUse.CurrentTargetAttackable();
 
+        if (_currentTarget != null) {
+            _targetHealthSlider.gameObject.SetActive(true);
+            _targetHealthText.gameObject.SetActive(true);
+            _targetText.gameObject.SetActive(true);
+            _targetHealthSlider.value = _currentTarget.HitPoints;
+            _targetHealthSlider.maxValue = _currentTarget.MaxHitPoints;
+            _targetText.text = _currentTarget.GetType().Name.ToString();
+            _targetHealthText.text = $"{_currentTarget.HitPoints}/{_currentTarget.MaxHitPoints}";
+        }
+        else {
+            _targetText.gameObject.SetActive(false);
+            _targetHealthSlider.gameObject.SetActive(false);
+            _targetHealthText.gameObject.SetActive(false);
+        }
     }
 }

@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System.Runtime;
-using UnityEngine.UI;
 
 public class PlayerInventory : MonoBehaviour {
 
@@ -85,26 +81,12 @@ public class PlayerInventory : MonoBehaviour {
         slot.Quantity = 0;
     }
 
-    private void CheckSlotIfEmpty(Slot inventorySlot) {
+    private void VerifySlot(Slot inventorySlot) {
         if (inventorySlot.Quantity.Equals(0)) {
             inventorySlot.Item = new None();
         }
-        if (_heldItem.Quantity.Equals(0)) {
+        if (HeldItem.Quantity.Equals(0)) {
             HeldItem.Item = new None();
-        }
-    }
-
-    private int ItemPickupRemainder(InventorySlot inventorySlot) {
-        var itemsInHand = HeldItem.Quantity;
-        var limit = HeldItem.Item.MaxStackSize;
-        var itemsInSlot = inventorySlot.Quantity;
-        if (itemsInHand + itemsInSlot <= limit) {
-            // return 0 if items in hand and slot within hand max
-            return 0;
-        }
-        else {
-            // return items needing to be subtracted from slot to equal the max
-            return limit - itemsInHand;
         }
     }
 
@@ -141,23 +123,29 @@ public class PlayerInventory : MonoBehaviour {
             inventorySlot.Quantity += HeldItem.Quantity;
             ClearSlot(HeldItem);
         }
+        VerifySlot(inventorySlot);
     }
 
     private void SlotOneItem(InventorySlot inventorySlot) {
         if (inventorySlot.Item is None) {
-            inventorySlot.Item = HeldItem.Item;
-            HeldItem.Quantity -= 1;
-            inventorySlot.Quantity += 1;
+            if (HeldItem.Quantity > 0) {
+                inventorySlot.Item = HeldItem.Item;
+                HeldItem.Quantity -= 1;
+                inventorySlot.Quantity += 1;
+                VerifySlot(inventorySlot);
+            }
         }
         else {
             if (HeldItem.Item.Equals(inventorySlot.Item)) {
                 if (HeldItem.Quantity > 0 && inventorySlot.Quantity < inventorySlot.Item.MaxStackSize) {
                     HeldItem.Quantity -= 1;
                     inventorySlot.Quantity += 1;
+                    VerifySlot(inventorySlot);
                 }
             }
             else {
                 SwapItems(inventorySlot);
+                VerifySlot(inventorySlot);
             }
         }
     }
@@ -168,6 +156,7 @@ public class PlayerInventory : MonoBehaviour {
             HeldItem.Quantity += half;
             inventorySlot.Quantity -= half;
             HeldItem.Item = inventorySlot.Item;
+            VerifySlot(inventorySlot);
         }
     }
 

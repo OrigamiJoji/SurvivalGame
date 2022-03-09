@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using UnityEngine.Events;
 
 public class InventoryUI : MonoBehaviour, IPointerClickHandler {
 
@@ -18,17 +15,14 @@ public class InventoryUI : MonoBehaviour, IPointerClickHandler {
     private void Awake() {
         _playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
         _quantityText = gameObject.GetComponentInChildren<Text>();
-        // _image = gameObject.GetComponentInChildren<Image>();
         _image = transform.Find("Image").GetComponent<Image>();
     }
 
     public void OnPointerClick(PointerEventData eventData) {
         if (eventData.button == PointerEventData.InputButton.Left) {
-            //onLeftClick.Invoke();
             LeftClickFunction();
         }
         else if (eventData.button == PointerEventData.InputButton.Right) {
-            //onRightClick.Invoke();
             RightClickFunction();
         }
         else if(eventData.button == PointerEventData.InputButton.Middle) {
@@ -50,9 +44,7 @@ public class InventoryUI : MonoBehaviour, IPointerClickHandler {
     }
 
     private void Update() {
-       // if (_playerInventory.GetImage(_buttonPositionX, _buttonPositionY) != null) {
-       //     _image = _playerInventory.GetImage(_buttonPositionX, _buttonPositionY);
-       // }
+
        if(_playerInventory.GetQuantity(_buttonPositionX, _buttonPositionY) != 0) {
             _quantityText.text = _playerInventory.GetQuantity(_buttonPositionX, _buttonPositionY).ToString();
         }
@@ -68,5 +60,4 @@ public class InventoryUI : MonoBehaviour, IPointerClickHandler {
             _image.sprite = _playerInventory.GetSprite(_buttonPositionX, _buttonPositionY);
         }
     }
-
 }

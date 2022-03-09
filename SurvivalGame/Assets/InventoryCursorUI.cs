@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,5 +32,4 @@ public class InventoryCursorUI : MonoBehaviour
             _image.sprite = _playerInventory.GetSprite();
         }
     }
-
 }

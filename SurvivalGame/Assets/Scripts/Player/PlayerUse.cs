@@ -13,6 +13,7 @@ public sealed class PlayerUse : MonoBehaviour
     private PlayerLook _playerLook;
 
     private bool IsInventoryOpened { get; set; }
+
     [SerializeField] private GameObject _fullInventory;
 
     [field: SerializeField] public double TimeToAttack { get; private set; }
@@ -38,14 +39,13 @@ public sealed class PlayerUse : MonoBehaviour
         else { CanAttack = true; }
 
 
-        if(Input.GetMouseButton(0) && CanAttack) {
+        if(Input.GetMouseButton(0) && CanAttack && !IsInventoryOpened) {
             TimeToAttack = _playerInventory.EquippedItemToolStats.AttackSpeed;
             CanAttack = false;
             if(Physics.Raycast(_playerCamera.position, _playerCamera.forward, out RaycastHit hit, _playerInventory.EquippedItemToolStats.Range, _playerMask)) {
                 Debug.DrawRay(_playerCamera.position, _playerCamera.forward, Color.green, 1);
                 GameObject objectHit = hit.collider.gameObject;
-
-                if(objectHit.CompareTag("Attackable")) { 
+                if (objectHit.CompareTag("Attackable")) { 
                     // if Attackable, do damage.
                     Attackable objectAttackable = objectHit.GetComponent<Attackable>();
                     objectAttackable.TakeDamage(_playerInventory.EquippedItemToolStats.Damage);
@@ -71,4 +71,14 @@ public sealed class PlayerUse : MonoBehaviour
         }
     }
 
+    public Attackable CurrentTargetAttackable() {
+        if (Physics.Raycast(_playerCamera.position, _playerCamera.forward, out RaycastHit hit, _playerInventory.EquippedItemToolStats.Range, _playerMask)) {
+            GameObject objectHit = hit.collider.gameObject;
+            if (objectHit.CompareTag("Attackable")) {
+                Attackable objectAttackable = objectHit.GetComponent<Attackable>();
+                return objectAttackable;
+            }
+        }
+        return null;
+    }
 }

@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class ImageHandler : MonoBehaviour {
+public sealed class ImageHandler : MonoBehaviour {
     static ImageHandler _instance;
     public static ImageHandler Instance {
         get {
@@ -20,8 +18,6 @@ public class ImageHandler : MonoBehaviour {
         public Sprite _sprite;
     }
     [SerializeField] private List<ItemImage> ImageList;
-
-
     public Sprite GetSprite(string name) {
         return ImageList.Find(e => e._name.Equals(name))._sprite;
     }

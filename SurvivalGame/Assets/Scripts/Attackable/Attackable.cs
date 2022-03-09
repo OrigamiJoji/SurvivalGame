@@ -4,16 +4,22 @@ using UnityEngine;
 
 public abstract class Attackable : MonoBehaviour
 {
-    protected float hitPoints { get; set; }
+    public float HitPoints { get; set; }
+    public float MaxHitPoints { get; set; }
 
     public void TakeDamage(float dmg) {
-        hitPoints -= dmg;
-        if(hitPoints <= 0) {
+        HitPoints -= dmg;
+        if(HitPoints <= 0) {
             Death();
         }
     }
 
     private void Death() {
         gameObject.SetActive(false);
+    }
+
+    protected void SpawnEntity(float hitPoints) {
+        MaxHitPoints = hitPoints;
+        HitPoints = hitPoints;
     }
 }

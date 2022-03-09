@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System.Runtime;
 
 public class PlayerInventory : MonoBehaviour {
 
@@ -41,8 +38,8 @@ public class PlayerInventory : MonoBehaviour {
 
     [System.Serializable]
     public class InventorySlot : Slot {
-        public int Position { get; private set; }
-        public static int TotalSlots { get; private set; }
+        public int Position { get; set; }
+        public static int TotalSlots { get; set; }
 
         public InventorySlot() {
             Item = null;
@@ -50,187 +47,177 @@ public class PlayerInventory : MonoBehaviour {
             TotalSlots++;
         }
     }
-    private void GenerateSlots(InventorySlot inventorySlot) {
-        _totalSlots = _inventory.GetLength(1) * _inventory.GetLength(0);
+
+    #endregion Slot Class
+
+    private void GenerateSlots() {
         for (int i = _totalSlots; i > 0; i--) {
+            InventorySlot inventorySlot = new InventorySlot();
+            inventorySlot.Item = new None();
+            inventorySlot.Quantity = 0;
             var column = inventorySlot.Position % _inventory.GetLength(1);
             var row = Mathf.FloorToInt(inventorySlot.Position / _inventory.GetLength(1));
             _inventory[row, column] = inventorySlot;
-            Debug.Log($"Item #{inventorySlot.Position} is in position #[{row}, {column}] and contains {inventorySlot.Item}. A total of {InventorySlot.TotalSlots}");
+            Debug.Log($"Item #{inventorySlot.Position} is in position #[{row}, {column}] and contains {inventorySlot.Item}. A total of {InventorySlot.TotalSlots} slots exist");
         }
     }
-    #endregion Slot Class
 
     private void Start() {
-        GenerateSlots(new InventorySlot());
+        _totalSlots = _inventory.GetLength(1) * _inventory.GetLength(0);
+        GenerateSlots();
+        FindSlot(0, 1).Item = new Axe();
+        FindSlot(0, 1).Quantity = 20;
+
+        FindSlot(1, 3).Item = new Stick();
+        FindSlot(1, 3).Quantity = 20;
+
+        HeldItem.Item = new None();
+        HeldItem.Quantity = 0;
     }
-
-
-
-
-
-
-
-
 
 
     private void ClearSlot(Slot slot) {
-        slot.Item = null;
+        slot.Item = new None();
         slot.Quantity = 0;
     }
 
-    private void EmptySlot(Slot inventorySlot) {
+    private void VerifySlot(Slot inventorySlot) {
         if (inventorySlot.Quantity.Equals(0)) {
-            inventorySlot.Item = null;
+            inventorySlot.Item = new None();
         }
-        if(_heldItem.Quantity.Equals(0)) {
-            HeldItem.Item = null;
-        }
-    }
-
-    private void CheckQuantity(Slot inventorySlot) {
-        if(HeldItem.Item.MaxStackSize > inventorySlot.Item.MaxStackSize) {
-
+        if (HeldItem.Quantity.Equals(0)) {
+            HeldItem.Item = new None();
         }
     }
 
-    private bool CanItemsBePickedUp() {
-        return true;
-    }
-
-    private bool CanItemsBePlaced() {
-        return true;
-    }
-
-
-    private void GrabItems(InventorySlot inventorySlot) {
-        HeldItem.Item = inventorySlot.Item;
-        HeldItem.Quantity = inventorySlot.Quantity;
-        ClearSlot(inventorySlot);
-    }
-
-    private void StoreHalf(InventorySlot inventorySlot) {
-        if (inventorySlot.Item.Equals(null)) {
-            inventorySlot.Item = _heldItem.Item;
+    private int ItemPlaceRemainder(InventorySlot inventorySlot) {
+        var itemsInHand = HeldItem.Quantity; // 45
+        var limit = inventorySlot.Item.MaxStackSize; //64
+        var itemsInSlot = inventorySlot.Quantity; // 25
+        if (itemsInHand + itemsInSlot <= limit) {
+            // return 0 if items in slot and hand are within slot max
+            return 0;
         }
-        var half = HeldItem.Quantity / 2;
-        inventorySlot.Quantity += half;
-        HeldItem.Quantity -= half;
+        else {
+            // return items needing to be subtracted from hand to equal the max
+            return limit - itemsInSlot;
+        }
+    }
+
+    private void SwapItems(InventorySlot inventorySlot) {
+        var tempItem = inventorySlot.Item;
+        var tempQuantity = inventorySlot.Quantity;
+        inventorySlot.Item = HeldItem.Item;
+        inventorySlot.Quantity = HeldItem.Quantity;
+        HeldItem.Item = tempItem;
+        HeldItem.Quantity = tempQuantity;
+    }
+
+    private void SlotAllItems(InventorySlot inventorySlot) {
+        var req = ItemPlaceRemainder(inventorySlot);
+        if (req > 0) {
+            inventorySlot.Quantity += req;
+            HeldItem.Quantity -= req;
+        }
+        else {
+            inventorySlot.Quantity += HeldItem.Quantity;
+            ClearSlot(HeldItem);
+        }
+        VerifySlot(inventorySlot);
+    }
+
+    private void SlotOneItem(InventorySlot inventorySlot) {
+        if (inventorySlot.Item is None) {
+            if (HeldItem.Quantity > 0) {
+                inventorySlot.Item = HeldItem.Item;
+                HeldItem.Quantity -= 1;
+                inventorySlot.Quantity += 1;
+                VerifySlot(inventorySlot);
+            }
+        }
+        else {
+            if (HeldItem.Item.Equals(inventorySlot.Item)) {
+                if (HeldItem.Quantity > 0 && inventorySlot.Quantity < inventorySlot.Item.MaxStackSize) {
+                    HeldItem.Quantity -= 1;
+                    inventorySlot.Quantity += 1;
+                    VerifySlot(inventorySlot);
+                }
+            }
+            else {
+                SwapItems(inventorySlot);
+                VerifySlot(inventorySlot);
+            }
+        }
     }
 
     private void TakeHalf(InventorySlot inventorySlot) {
-        var half = inventorySlot.Quantity / 2;
-        HeldItem.Quantity += half;
-        inventorySlot.Quantity -= half;
-    }
-
-
-    private void SwapItems(InventorySlot inventorySlot) {
-        var tempSlot = inventorySlot;
-        inventorySlot.Item = HeldItem.Item;
-        inventorySlot.Quantity = HeldItem.Quantity;
-        HeldItem.Item = tempSlot.Item;
-        HeldItem.Quantity = tempSlot.Quantity;
-    }
-
-
-    private void AddSingleItem(InventorySlot inventorySlot) {
-        if (HeldItem.Quantity > 0) {
-            inventorySlot.Quantity += 1;
-            HeldItem.Quantity -= 1;
-        }
-        else {
-            ClearSlot(HeldItem);
+        if (inventorySlot.Quantity >= 2) {
+            var half = inventorySlot.Quantity / 2;
+            HeldItem.Quantity += half;
+            inventorySlot.Quantity -= half;
+            HeldItem.Item = inventorySlot.Item;
+            VerifySlot(inventorySlot);
         }
     }
 
-    private void RemoveSingleItem(InventorySlot inventorySlot) {
-        if (inventorySlot.Quantity > 0) {
-            inventorySlot.Quantity -= 1;
-            HeldItem.Quantity += 1;
-        }
-    }
 
-    /* check if items in hand can carry items picked up, else pickup differece
-     * check if items in hand can be placed
-     * items in hand max should be equal to the max amount that can be stored of that item
-     * 
-     * on click left
-     * if items held and items slot, swap items
-     * if items held and no items slot, place items
-     * if no items held and items in click, swap items
-     * if no items held and no items slot, swap items
-     * 
-     * on click right
-     * if items held and items slot: if same item, drop half
-     * else swap
-     * if no items held and items slot, pickup half
-     * if items held and items slot, swap
-     * if no items held and no items slot, swap
-     * 
-     * 
-     */
-
-
+    #region Action Methods
     public void OnLeftClick(int x, int y) {
         var currentSlot = FindSlot(x, y);
-
-        if (HeldItem.Item.Equals(null)) {
-            //if no item held
-            GrabItems(currentSlot);
+        if (currentSlot.Item.Equals(HeldItem.Item)) {
+            SlotAllItems(currentSlot);
         }
         else {
-            //if item is held
             SwapItems(currentSlot);
         }
-
     }
 
     public void OnRightClick(int x, int y) {
         var currentSlot = FindSlot(x, y);
-        if (HeldItem.Item.Equals(null)) {
-            //If no item is held
-            if (currentSlot.Item.Equals(null)) {
-                //if no item in slot
-                StoreHalf(currentSlot);
-            }
-            else {
-                // if item is in slot
-                TakeHalf(currentSlot);
-            }
+        if (HeldItem.Item is None) {
+            TakeHalf(currentSlot);
         }
-        else if (_heldItem.Item.Equals(currentSlot.Item)) {
-            //if holding the same item and right click
+        else {
+            SlotOneItem(currentSlot);
         }
+    }
+    #endregion Action Methods
+
+    #region Public Methods
+    public string GetSlotData() {
+        return $"{HeldItem.Quantity} of Item: {HeldItem.Item} exists in hand";
+    }
+    public string GetSlotData(int x, int y) {
+        InventorySlot slot = FindSlot(x, y);
+        return $"{slot.Quantity} of Item: {slot.Item} exists in Position #{slot.Position}";
     }
 
     public int GetQuantity(int x, int y) {
         return _inventory[x, y].Quantity;
     }
+    public int GetQuantity() {
+        return HeldItem.Quantity;
+    }
 
     public InventorySlot FindSlot(int x, int y) {
         return _inventory[x, y];
     }
-
-    public Sprite GetImage(int x, int y) {
-        return null;
+    public Item GetItem(int x, int y) {
+        return _inventory[x, y].Item;
     }
-}
-
-
-// To store item objects in an inventory array and return each item's specific properties.
-
-/*
- * Incase I need it later
- * 
-static PlayerInventory _instance;
-public static PlayerInventory Instance {
-    get {
-        if (_instance == null) {
-            _instance = FindObjectOfType<PlayerInventory>();
-        }
-        return _instance;
+    public Item GetItem() {
+        return HeldItem.Item;
     }
+
+    public Sprite GetSprite() {
+        return HeldItem.Item.Icon;
+    }
+    public Sprite GetSprite(int x, int y) {
+        return _inventory[x, y].Item.Icon;
+    }
+
+    #endregion Public Methods
+
+
 }
-*/
 

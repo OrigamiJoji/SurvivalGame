@@ -5,6 +5,7 @@ using UnityEngine;
 public class None : Item
 {
     public None() {
+
         MaxStackSize = 0;
     }
 }

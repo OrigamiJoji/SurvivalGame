@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ImageHandler : MonoBehaviour
-{
+public class ImageHandler : MonoBehaviour {
     static ImageHandler _instance;
     public static ImageHandler Instance {
         get {
@@ -18,12 +17,12 @@ public class ImageHandler : MonoBehaviour
     [System.Serializable]
     public class ItemImage {
         public string _name;
-        public Image _image;
+        public Sprite _sprite;
     }
     [SerializeField] private List<ItemImage> ImageList;
 
-    public Image GetIcon(string name) {
-        return ImageList.Find(e => e._name.Equals(name))._image;
-    }
 
+    public Sprite GetSprite(string name) {
+        return ImageList.Find(e => e._name.Equals(name))._sprite;
+    }
 }

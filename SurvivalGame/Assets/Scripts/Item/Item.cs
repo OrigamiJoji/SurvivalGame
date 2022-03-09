@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public abstract class Item {
     public int MaxStackSize { get; set; }
     public int CurrentAmount { get; set; }
-    public Image Icon { get; set; }
+    public Sprite Icon { get; set; }
 
     public Item() {
         MaxStackSize = 20;

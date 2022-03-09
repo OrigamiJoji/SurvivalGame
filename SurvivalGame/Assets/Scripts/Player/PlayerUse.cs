@@ -4,19 +4,31 @@ using UnityEngine;
 
 public sealed class PlayerUse : MonoBehaviour
 {
-    private PlayerInventory _playerInventory;
+
     [SerializeField] private Transform _playerCamera;
     [SerializeField] private LayerMask _playerMask;
+
+    private PlayerMove _playerMove;
+    private PlayerInventory _playerInventory;
+    private PlayerLook _playerLook;
+
+    private bool IsInventoryOpened { get; set; }
+    [SerializeField] private GameObject _fullInventory;
 
     [field: SerializeField] public double TimeToAttack { get; private set; }
     [field: SerializeField] public bool CanAttack { get; private set; }
 
     private void Awake() {
         _playerInventory = gameObject.GetComponent<PlayerInventory>();
+        _playerMove = gameObject.GetComponent<PlayerMove>();
+        _playerLook = gameObject.GetComponent<PlayerLook>();
     }
     private void Start() {
         _playerMask = ~_playerMask;
         _playerInventory.EquippedItem = new Fists();
+        IsInventoryOpened = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        _fullInventory.SetActive(false);
     }
 
     private void Update() {
@@ -39,6 +51,23 @@ public sealed class PlayerUse : MonoBehaviour
                     objectAttackable.TakeDamage(_playerInventory.EquippedItemToolStats.Damage);
                 }
             }
+        }
+
+        if(Input.GetKeyDown(KeyCode.E) && !IsInventoryOpened) {
+            //open inv
+            _fullInventory.SetActive(true);
+            IsInventoryOpened = true;
+            Cursor.lockState = CursorLockMode.None;
+            _playerMove.LockMovement(true);
+            _playerLook.LockMouseInput(true);
+        }
+        else if(Input.GetKeyDown(KeyCode.E) && IsInventoryOpened) {
+            //close inv
+            _fullInventory.SetActive(false);
+            IsInventoryOpened = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            _playerMove.LockMovement(false);
+            _playerLook.LockMouseInput(false);
         }
     }
 

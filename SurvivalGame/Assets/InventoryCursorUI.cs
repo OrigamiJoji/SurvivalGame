@@ -12,15 +12,27 @@ public class InventoryCursorUI : MonoBehaviour
     private void Awake() {
         _playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
         _quantityText = gameObject.GetComponentInChildren<Text>();
-        _image = gameObject.GetComponentInChildren<Image>();
+        //_image = gameObject.GetComponentInChildren<Image>();
+        _image = transform.Find("Image").GetComponent<Image>();
     }
 
     private void Update() {
-        // if (_playerInventory.GetImage() != null) {
-        //     _image = _playerInventory.GetImage();
-        // }
         gameObject.transform.position = Input.mousePosition;
-        _quantityText.text = _playerInventory.GetQuantity().ToString();
+
+        if (_playerInventory.GetQuantity() != 0) {
+            _quantityText.text = _playerInventory.GetQuantity().ToString();
+        }
+        else {
+            _quantityText.text = string.Empty;
+        }
+
+        if (_playerInventory.GetItem() is None) {
+            _image.gameObject.SetActive(false);
+        }
+        else {
+            _image.gameObject.SetActive(true);
+            _image.sprite = _playerInventory.GetSprite();
+        }
     }
 
 }

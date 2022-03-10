@@ -9,6 +9,7 @@ public class Axe : Item, ITool {
 
     public Axe() {
         Icon = ImageHandler.Instance.GetSprite(GetType().Name.ToString());
+        ItemType = this.GetType();
         ToolName = "Fists";
         Durability = 100;
         Damage = 5;

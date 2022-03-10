@@ -45,7 +45,7 @@ public class InventoryUI : MonoBehaviour, IPointerClickHandler {
 
     private void Update() {
 
-       if(_playerInventory.GetQuantity(_buttonPositionX, _buttonPositionY) != 0) {
+       if(_playerInventory.GetQuantity(_buttonPositionX, _buttonPositionY) > 1) {
             _quantityText.text = _playerInventory.GetQuantity(_buttonPositionX, _buttonPositionY).ToString();
         }
        else {

@@ -17,7 +17,7 @@ public class InventoryCursorUI : MonoBehaviour
     private void Update() {
         gameObject.transform.position = Input.mousePosition;
 
-        if (_playerInventory.GetQuantity() != 0) {
+        if (_playerInventory.GetQuantity() > 1) {
             _quantityText.text = _playerInventory.GetQuantity().ToString();
         }
         else {

@@ -17,7 +17,9 @@ public sealed class ImageHandler : MonoBehaviour {
         public string _name;
         public Sprite _sprite;
     }
+
     [SerializeField] private List<ItemImage> ImageList;
+    //[SerializeField] private List<List<ItemImage>> SpriteList;
     public Sprite GetSprite(string name) {
         return ImageList.Find(e => e._name.Equals(name))._sprite;
     }

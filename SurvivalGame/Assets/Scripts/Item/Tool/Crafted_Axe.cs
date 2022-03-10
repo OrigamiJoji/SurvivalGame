@@ -1,15 +1,17 @@
 using UnityEngine;
 
-public class Axe : Item, ITool {
+public class Crafted_Axe : Item, ITool {
     public string ToolName { get; private set; }
     public float Durability { get; set; }
     public float Damage { get; private set; }
     public float Range { get; private set; }
     public double AttackSpeed { get; private set; }
 
-    public Axe() {
+    public Crafted_Axe() {
         Icon = ImageHandler.Instance.GetSprite(GetType().Name.ToString());
-        ToolName = "Fists";
+        ItemType = this.GetType();
+        ToolName = "Crafted Axe";
+        MaxStackSize = 1;
         Durability = 100;
         Damage = 5;
         Range = 6;

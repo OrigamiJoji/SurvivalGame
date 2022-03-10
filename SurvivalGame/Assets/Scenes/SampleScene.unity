@@ -264,9 +264,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ImageList:
-  - _name: Axe
+  - _name: Crafted_Axe
     _sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  - _name: Crafted Pickaxe
+    _sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  - _name: Smelter
+    _sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  - _name: Worktable
+    _sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   - _name: Stick
+    _sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  - _name: Wood
+    _sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  - _name: Stone
+    _sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  - _name: Iron
+    _sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  - _name: Iron Bar
     _sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!4 &70802836
 Transform:
@@ -525,7 +539,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &128136092
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2245,7 +2259,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &608540956
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2775,6 +2789,49 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 783174543}
   m_CullTransparentMesh: 1
+--- !u!1 &786395408
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 786395410}
+  - component: {fileID: 786395409}
+  m_Layer: 0
+  m_Name: Debug
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &786395409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786395408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2731f2eb4b4912a46a0d57a90c494711, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &786395410
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786395408}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 398.39343, y: 233.9324, z: -50.66362}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &810187271
 GameObject:
   m_ObjectHideFlags: 0
@@ -3698,7 +3755,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1004953897
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5971,7 +6028,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 4.122986, y: 0}
   m_SizeDelta: {x: 18.247, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

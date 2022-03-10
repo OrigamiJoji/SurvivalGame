@@ -44,7 +44,6 @@ public class PlayerInventory : MonoBehaviour {
         public static int TotalSlots { get; set; }
 
         public InventorySlot() {
-            Item = null;
             Position = TotalSlots;
             TotalSlots++;
         }
@@ -60,6 +59,11 @@ public class PlayerInventory : MonoBehaviour {
         return column;
     }
 
+    private int GetPosition (int row, int column) {
+        var pos = row * _inventory.GetLength(1);
+        pos += column;
+        return pos;
+    }
 
     private void GenerateSlots() {
         for (int i = _totalSlots; i > 0; i--) {
@@ -75,14 +79,17 @@ public class PlayerInventory : MonoBehaviour {
     private void Start() {
         _totalSlots = _inventory.GetLength(1) * _inventory.GetLength(0);
         GenerateSlots();
-        FindSlot(0, 1).Item = new Axe();
-        FindSlot(0, 1).Quantity = 20;
+        FindSlot(0, 1).Item = new Crafted_Axe();
+        FindSlot(0, 1).Quantity = 1;
 
         FindSlot(1, 3).Item = new Stick();
         FindSlot(1, 3).Quantity = 20;
 
         HeldItem.Item = new None();
         HeldItem.Quantity = 0;
+        Debug.Log(GetColumn(11));
+        Debug.Log(GetRow(11));
+        Debug.Log(GetPosition(GetRow(11), GetColumn(11)));
     }
 
 
@@ -154,23 +161,24 @@ public class PlayerInventory : MonoBehaviour {
 
     public void PickupItem(Item item, int quantity) {
         foreach(InventorySlot inventorySlot in _inventory) {
-            if(inventorySlot.Item.Equals(item)) {
+            if(inventorySlot.Item.GetType() == item.ItemType && inventorySlot.Quantity < inventorySlot.Item.MaxStackSize) {
                 if(quantity + inventorySlot.Quantity <= inventorySlot.Item.MaxStackSize) {
-                    //if can pick up all items
-                    //pick up
+                    inventorySlot.Quantity += quantity;
+                    break;
                 }
                 else {
                     //if remainder
                     var diff = inventorySlot.Item.MaxStackSize - inventorySlot.Quantity;
-                    quantity -= diff;
                     inventorySlot.Quantity += diff;
-                    PickupItem(item, quantity);
+                    PickupItem(item, quantity -= diff);
+                    break;
                 }
             }
             else {
                 var nextSlot = GetNextSlot();
                 nextSlot.Item = item;
                 nextSlot.Quantity = quantity;
+                break;
             }
         }
     }
@@ -240,11 +248,6 @@ public class PlayerInventory : MonoBehaviour {
         inventorySlot.Quantity = HeldItem.Quantity;
         HeldItem.Item = tempItem;
         HeldItem.Quantity = tempQuantity;
-    }
-
-    private void ClearSlot(Slot slot) {
-        slot.Item = new None();
-        slot.Quantity = 0;
     }
 
     private void VerifySlot(Slot inventorySlot) {

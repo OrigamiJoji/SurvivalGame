@@ -19,7 +19,7 @@ public class DebugTester : MonoBehaviour {
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.F1)) {
-            _playerInventory.PickupItem(new Axe(), 1);
+            _playerInventory.PickupItem(new Crafted_Axe(), 1);
         }
         if (Input.GetKeyDown(KeyCode.F2)) {
             _playerInventory.PickupItem(new Stick(), 3);

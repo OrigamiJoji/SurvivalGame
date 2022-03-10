@@ -10,7 +10,6 @@ public class InventoryCursorUI : MonoBehaviour
     private void Awake() {
         _playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
         _quantityText = gameObject.GetComponentInChildren<Text>();
-        //_image = gameObject.GetComponentInChildren<Image>();
         _image = transform.Find("Image").GetComponent<Image>();
     }
 
@@ -32,4 +31,5 @@ public class InventoryCursorUI : MonoBehaviour
             _image.sprite = _playerInventory.GetSprite();
         }
     }
+
 }

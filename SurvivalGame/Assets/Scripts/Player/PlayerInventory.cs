@@ -32,24 +32,7 @@ public class PlayerInventory : MonoBehaviour {
     }
     #endregion Data Members
 
-    #region Slot Class
-    public class Slot {
-        public Item Item { get; set; }
-        public int Quantity { get; set; }
-    }
 
-    [System.Serializable]
-    public class InventorySlot : Slot {
-        public int Position { get; set; }
-        public static int TotalSlots { get; set; }
-
-        public InventorySlot() {
-            Position = TotalSlots;
-            TotalSlots++;
-        }
-    }
-
-    #endregion Slot Class
     private int GetRow(int slotPos) {
         var row = Mathf.FloorToInt(slotPos / _inventory.GetLength(1));
         return row;
@@ -258,6 +241,27 @@ public class PlayerInventory : MonoBehaviour {
             HeldItem.Item = new None();
         }
     }
+    
 
 }
 
+#region Slot Class
+
+public class Slot {
+    public Item Item { get; set; }
+    public int Quantity { get; set; }
+}
+
+
+[System.Serializable]
+public class InventorySlot : Slot {
+    public int Position { get; set; }
+    public static int TotalSlots { get; set; }
+
+    public InventorySlot() {
+        Position = TotalSlots;
+        TotalSlots++;
+    }
+}
+
+#endregion Slot Class

@@ -59,7 +59,7 @@ public class PlayerInventory : MonoBehaviour {
         return column;
     }
 
-    private int GetPosition (int row, int column) {
+    private int GetPosition(int row, int column) {
         var pos = row * _inventory.GetLength(1);
         pos += column;
         return pos;
@@ -151,8 +151,8 @@ public class PlayerInventory : MonoBehaviour {
         }
     }
     private InventorySlot GetNextSlot() {
-        foreach(InventorySlot inventorySlot in _inventory) {
-            if(inventorySlot.Item is None) {
+        foreach (InventorySlot inventorySlot in _inventory) {
+            if (inventorySlot.Item is None) {
                 return inventorySlot;
             }
         }
@@ -160,21 +160,22 @@ public class PlayerInventory : MonoBehaviour {
     }
 
     public void PickupItem(Item item, int quantity) {
-        foreach(InventorySlot inventorySlot in _inventory) {
-            if(inventorySlot.Item.GetType() == item.ItemType && inventorySlot.Quantity < inventorySlot.Item.MaxStackSize) {
-                if(quantity + inventorySlot.Quantity <= inventorySlot.Item.MaxStackSize) {
-                    inventorySlot.Quantity += quantity;
+        for (int s = 0; s < _totalSlots; s++) {
+            InventorySlot currentSearchSlot = FindSlot(GetRow(s), GetColumn(s));
+            if (currentSearchSlot.Item.ItemType == item.ItemType && currentSearchSlot.Quantity < currentSearchSlot.Item.MaxStackSize) {
+                if (quantity + currentSearchSlot.Quantity <= currentSearchSlot.Item.MaxStackSize) {
+                    currentSearchSlot.Quantity += quantity;
                     break;
                 }
                 else {
                     //if remainder
-                    var diff = inventorySlot.Item.MaxStackSize - inventorySlot.Quantity;
-                    inventorySlot.Quantity += diff;
+                    var diff = currentSearchSlot.Item.MaxStackSize - currentSearchSlot.Quantity;
+                    currentSearchSlot.Quantity += diff;
                     PickupItem(item, quantity -= diff);
                     break;
                 }
             }
-            else {
+            if (s == _totalSlots - 1) {
                 var nextSlot = GetNextSlot();
                 nextSlot.Item = item;
                 nextSlot.Quantity = quantity;
@@ -182,7 +183,6 @@ public class PlayerInventory : MonoBehaviour {
             }
         }
     }
-
 
     #region Action Methods
     public void OnLeftClick(int x, int y) {
@@ -210,23 +210,23 @@ public class PlayerInventory : MonoBehaviour {
     public string GetSlotData() {
         return $"{HeldItem.Quantity} of Item: {HeldItem.Item} exists in hand. Type: {HeldItem.Item.GetType()}";
     }
-    public string GetSlotData(int x, int y) {
-        InventorySlot slot = FindSlot(x, y);
+    public string GetSlotData(int row, int column) {
+        InventorySlot slot = FindSlot(row, column);
         return $"{slot.Quantity} of Item: {slot.Item} exists in Position #{slot.Position}. Type: {slot.Item.ItemType}";
     }
 
-    public int GetQuantity(int x, int y) {
-        return _inventory[x, y].Quantity;
+    public int GetQuantity(int row, int column) {
+        return _inventory[row, column].Quantity;
     }
     public int GetQuantity() {
         return HeldItem.Quantity;
     }
 
-    public InventorySlot FindSlot(int x, int y) {
-        return _inventory[x, y];
+    public InventorySlot FindSlot(int row, int column) {
+        return _inventory[row, column];
     }
-    public Item GetItem(int x, int y) {
-        return _inventory[x, y].Item;
+    public Item GetItem(int row, int column) {
+        return _inventory[row, column].Item;
     }
     public Item GetItem() {
         return HeldItem.Item;
@@ -235,8 +235,8 @@ public class PlayerInventory : MonoBehaviour {
     public Sprite GetSprite() {
         return HeldItem.Item.Icon;
     }
-    public Sprite GetSprite(int x, int y) {
-        return _inventory[x, y].Item.Icon;
+    public Sprite GetSprite(int row, int column) {
+        return _inventory[row, column].Item.Icon;
     }
 
     #endregion Public Methods

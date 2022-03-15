@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Attackable
+  - Material
   layers:
   - Default
   - TransparentFX

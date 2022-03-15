@@ -4,9 +4,12 @@ using System.Runtime;
 
 public class PlayerInventory : MonoBehaviour {
 
+
+
     #region Data Members
     private InventorySlot[,] _inventory = new InventorySlot[3, 5];
     private int _totalSlots;
+    public int EquippedSlot { get; set; }
 
     private Slot _heldItem = new Slot();
     public Slot HeldItem {
@@ -20,10 +23,10 @@ public class PlayerInventory : MonoBehaviour {
 
 
     public Item EquippedItem { get; set; }
-    public ITool EquippedItemToolStats {
+    public Tool EquippedItemToolStats {
         get {
-            if (EquippedItem is ITool) {
-                return (ITool)EquippedItem;
+            if (EquippedItem is Tool tool) {
+                return tool;
             }
             else {
                 return new Fists();
@@ -32,24 +35,7 @@ public class PlayerInventory : MonoBehaviour {
     }
     #endregion Data Members
 
-    #region Slot Class
-    public class Slot {
-        public Item Item { get; set; }
-        public int Quantity { get; set; }
-    }
 
-    [System.Serializable]
-    public class InventorySlot : Slot {
-        public int Position { get; set; }
-        public static int TotalSlots { get; set; }
-
-        public InventorySlot() {
-            Position = TotalSlots;
-            TotalSlots++;
-        }
-    }
-
-    #endregion Slot Class
     private int GetRow(int slotPos) {
         var row = Mathf.FloorToInt(slotPos / _inventory.GetLength(1));
         return row;
@@ -87,17 +73,28 @@ public class PlayerInventory : MonoBehaviour {
 
         HeldItem.Item = new None();
         HeldItem.Quantity = 0;
-        Debug.Log(GetColumn(11));
-        Debug.Log(GetRow(11));
-        Debug.Log(GetPosition(GetRow(11), GetColumn(11)));
+        EquippedItem = new Crafted_Axe();
+    }
+    private void Update() {
+        ChangeItem();
     }
 
-
+    private void ChangeItem() {
+        for (int i = 0; i < 5; i++) {
+            if (Input.GetKeyDown(KeyCode.Alpha1 + i)) {
+                SelectItem(i);
+            }
+        }
+    }
+    private void SelectItem(int column) {
+        var currentSlot = FindSlot(0, column);
+        EquippedItem = currentSlot.Item;
+    }
 
     private int ItemPlaceRemainder(InventorySlot inventorySlot) {
-        var itemsInHand = HeldItem.Quantity; // 45 // 2
-        var limit = inventorySlot.Item.MaxStackSize; //64 // 20
-        var itemsInSlot = inventorySlot.Quantity; // 25 // 20
+        var itemsInHand = HeldItem.Quantity;
+        var limit = inventorySlot.Item.MaxStackSize;
+        var itemsInSlot = inventorySlot.Quantity;
         if (itemsInHand + itemsInSlot < limit) {
             // return all items if items in slot and hand are within slot max
             return itemsInHand;
@@ -110,7 +107,6 @@ public class PlayerInventory : MonoBehaviour {
 
     private void SlotAllItems(InventorySlot inventorySlot) {
         var req = ItemPlaceRemainder(inventorySlot);
-        Debug.Log(ItemPlaceRemainder(inventorySlot));
         inventorySlot.Quantity += req;
         HeldItem.Quantity -= req;
         VerifySlot(inventorySlot);
@@ -160,11 +156,11 @@ public class PlayerInventory : MonoBehaviour {
     }
 
     public void PickupItem(Item item, int quantity) {
-        for (int s = 0; s < _totalSlots; s++) {
-            InventorySlot currentSearchSlot = FindSlot(GetRow(s), GetColumn(s));
-            if (currentSearchSlot.Item.ItemType == item.ItemType && currentSearchSlot.Quantity < currentSearchSlot.Item.MaxStackSize) {
-                if (quantity + currentSearchSlot.Quantity <= currentSearchSlot.Item.MaxStackSize) {
-                    currentSearchSlot.Quantity += quantity;
+        Debug.Log($"Picking up {quantity} of {item}");
+        foreach(InventorySlot inventorySlot in _inventory) {
+            if(inventorySlot.Item.GetType() == item.ItemType && inventorySlot.Quantity < inventorySlot.Item.MaxStackSize) {
+                if(quantity + inventorySlot.Quantity <= inventorySlot.Item.MaxStackSize) {
+                    inventorySlot.Quantity += quantity;
                     break;
                 }
                 else {
@@ -207,6 +203,9 @@ public class PlayerInventory : MonoBehaviour {
     #endregion Action Methods
 
     #region Public Methods
+    public string GetName(int row, int column) {
+        return _inventory[row, column].Item.ToString().Replace("_", " ");
+    }
     public string GetSlotData() {
         return $"{HeldItem.Quantity} of Item: {HeldItem.Item} exists in hand. Type: {HeldItem.Item.GetType()}";
     }
@@ -258,6 +257,27 @@ public class PlayerInventory : MonoBehaviour {
             HeldItem.Item = new None();
         }
     }
+    
 
 }
 
+#region Slot Class
+
+public class Slot {
+    public Item Item { get; set; }
+    public int Quantity { get; set; }
+}
+
+
+[System.Serializable]
+public class InventorySlot : Slot {
+    public int Position { get; set; }
+    public static int TotalSlots { get; set; }
+
+    public InventorySlot() {
+        Position = TotalSlots;
+        TotalSlots++;
+    }
+}
+
+#endregion Slot Class

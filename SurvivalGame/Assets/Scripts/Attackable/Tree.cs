@@ -17,6 +17,7 @@ public class Tree : Attackable {
         TypeReq = typeof(Axe);
         TierReq = 1;
         SpawnEntity(_treeHP);
+        _typeReq = [typeof(Crafted_Axe)];
     }
 
 }

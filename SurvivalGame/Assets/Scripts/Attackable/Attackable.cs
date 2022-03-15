@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+
 public abstract class Attackable : MonoBehaviour {
     public float HitPoints { get; set; }
     public float MaxHitPoints { get; set; }

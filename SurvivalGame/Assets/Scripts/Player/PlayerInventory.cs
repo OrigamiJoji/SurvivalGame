@@ -45,7 +45,7 @@ public class PlayerInventory : MonoBehaviour {
         return column;
     }
 
-    private int GetPosition (int row, int column) {
+    private int GetPosition(int row, int column) {
         var pos = row * _inventory.GetLength(1);
         pos += column;
         return pos;
@@ -147,8 +147,8 @@ public class PlayerInventory : MonoBehaviour {
         }
     }
     private InventorySlot GetNextSlot() {
-        foreach(InventorySlot inventorySlot in _inventory) {
-            if(inventorySlot.Item is None) {
+        foreach (InventorySlot inventorySlot in _inventory) {
+            if (inventorySlot.Item is None) {
                 return inventorySlot;
             }
         }
@@ -165,13 +165,13 @@ public class PlayerInventory : MonoBehaviour {
                 }
                 else {
                     //if remainder
-                    var diff = inventorySlot.Item.MaxStackSize - inventorySlot.Quantity;
-                    inventorySlot.Quantity += diff;
+                    var diff = currentSearchSlot.Item.MaxStackSize - currentSearchSlot.Quantity;
+                    currentSearchSlot.Quantity += diff;
                     PickupItem(item, quantity -= diff);
                     break;
                 }
             }
-            else {
+            if (s == _totalSlots - 1) {
                 var nextSlot = GetNextSlot();
                 nextSlot.Item = item;
                 nextSlot.Quantity = quantity;
@@ -179,7 +179,6 @@ public class PlayerInventory : MonoBehaviour {
             }
         }
     }
-
 
     #region Action Methods
     public void OnLeftClick(int x, int y) {

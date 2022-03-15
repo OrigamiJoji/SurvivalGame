@@ -8,7 +8,7 @@ public abstract class Item {
     public Type ItemType { get; set; }
 
     public Item() {
-        MaxStackSize = 20;
+        MaxStackSize = 64;
     }
     public Item(string name) {
 

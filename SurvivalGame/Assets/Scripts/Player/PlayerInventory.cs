@@ -4,17 +4,12 @@ using System.Runtime;
 
 public class PlayerInventory : MonoBehaviour {
 
-    [SerializeField] private GameObject _hotbar1;
-    [SerializeField] private GameObject _hotbar2;
-    [SerializeField] private GameObject _hotbar3;
-    [SerializeField] private GameObject _hotbar4;
-    [SerializeField] private GameObject _hotbar5;
-    [SerializeField] private GameObject equippedIcon;
+
 
     #region Data Members
     private InventorySlot[,] _inventory = new InventorySlot[3, 5];
     private int _totalSlots;
-
+    public int EquippedSlot { get; set; }
 
     private Slot _heldItem = new Slot();
     public Slot HeldItem {
@@ -30,8 +25,8 @@ public class PlayerInventory : MonoBehaviour {
     public Item EquippedItem { get; set; }
     public Tool EquippedItemToolStats {
         get {
-            if (EquippedItem is Tool) {
-                return (Tool)EquippedItem;
+            if (EquippedItem is Tool tool) {
+                return tool;
             }
             else {
                 return new Fists();
@@ -85,16 +80,15 @@ public class PlayerInventory : MonoBehaviour {
     }
 
     private void ChangeItem() {
-        if(Input.GetKeyDown(KeyCode.Alpha1)) { SelectItem(0, _hotbar1.transform); }
-        else if (Input.GetKeyDown(KeyCode.Alpha2)) { SelectItem(1, _hotbar2.transform); }
-        else if (Input.GetKeyDown(KeyCode.Alpha3)) { SelectItem(2, _hotbar3.transform); }
-        else if (Input.GetKeyDown(KeyCode.Alpha4)) { SelectItem(3, _hotbar4.transform); }
-        else if (Input.GetKeyDown(KeyCode.Alpha5)) { SelectItem(4, _hotbar5.transform); }
+        for (int i = 0; i < 5; i++) {
+            if (Input.GetKeyDown(KeyCode.Alpha1 + i)) {
+                SelectItem(i);
+            }
+        }
     }
-    private void SelectItem(int column, Transform buttonPos) {
+    private void SelectItem(int column) {
         var currentSlot = FindSlot(0, column);
         EquippedItem = currentSlot.Item;
-        equippedIcon.transform.position = buttonPos.position;
     }
 
     private int ItemPlaceRemainder(InventorySlot inventorySlot) {
@@ -210,26 +204,29 @@ public class PlayerInventory : MonoBehaviour {
     #endregion Action Methods
 
     #region Public Methods
+    public string GetName(int row, int column) {
+        return _inventory[row, column].Item.ToString().Replace("_", " ");
+    }
     public string GetSlotData() {
         return $"{HeldItem.Quantity} of Item: {HeldItem.Item} exists in hand. Type: {HeldItem.Item.GetType()}";
     }
-    public string GetSlotData(int x, int y) {
-        InventorySlot slot = FindSlot(x, y);
+    public string GetSlotData(int row, int column) {
+        InventorySlot slot = FindSlot(row, column);
         return $"{slot.Quantity} of Item: {slot.Item} exists in Position #{slot.Position}. Type: {slot.Item.ItemType}";
     }
 
-    public int GetQuantity(int x, int y) {
-        return _inventory[x, y].Quantity;
+    public int GetQuantity(int row, int column) {
+        return _inventory[row, column].Quantity;
     }
     public int GetQuantity() {
         return HeldItem.Quantity;
     }
 
-    public InventorySlot FindSlot(int x, int y) {
-        return _inventory[x, y];
+    public InventorySlot FindSlot(int row, int column) {
+        return _inventory[row, column];
     }
-    public Item GetItem(int x, int y) {
-        return _inventory[x, y].Item;
+    public Item GetItem(int row, int column) {
+        return _inventory[row, column].Item;
     }
     public Item GetItem() {
         return HeldItem.Item;
@@ -238,8 +235,8 @@ public class PlayerInventory : MonoBehaviour {
     public Sprite GetSprite() {
         return HeldItem.Item.Icon;
     }
-    public Sprite GetSprite(int x, int y) {
-        return _inventory[x, y].Item.Icon;
+    public Sprite GetSprite(int row, int column) {
+        return _inventory[row, column].Item.Icon;
     }
 
     #endregion Public Methods

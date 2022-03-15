@@ -5,12 +5,18 @@ using System;
 
 public class Tree : Attackable {
     [SerializeField] private float _treeHP;
-    [SerializeField] private Type typeReq;
+    //[SerializeField] private Type typeReq;
     [SerializeField] private int tierReq;
+    [SerializeField] private int _minDrop;
+    [SerializeField] private int _maxDrop;
+    private Drop _drops;
 
     private void Start() {
-        typeReq = typeof(Axe);
-        tierReq = 1;
+        _drops = new Drop(new Wood(), _minDrop, _maxDrop);
+        ItemDrops.Add(_drops);
+        TypeReq = typeof(Axe);
+        TierReq = 1;
         SpawnEntity(_treeHP);
     }
+
 }

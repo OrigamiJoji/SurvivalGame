@@ -16,17 +16,31 @@ public abstract class Item {
 }
 
 public abstract class Tool : Item {
-    public string ToolName { get; }
+    public int Tier { get; set; }
+    public string ToolName { get; set; }
     public float Durability { get; set; }
-    public float Damage { get; }
-    public double AttackSpeed { get; }
-    public float Range { get; }
+    public float Damage { get; set; }
+    public double AttackSpeed { get; set; }
+    public float Range { get; set; }
+    public Tool() {
+        MaxStackSize = 1;
+    }
 }
 
 public abstract class Axe : Tool {
-    public int Tier { get; set; }
     public Axe() {
-
+        Range = 3f;
+        AttackSpeed = 1.5f;
+    }
+}
+public class Crafted_Axe : Axe {
+    public Crafted_Axe() {
+        Icon = ImageHandler.Instance.GetSprite(GetType().Name.ToString());
+        ItemType = this.GetType();
+        Tier = 1;
+        ToolName = "Crafted Axe";
+        Durability = 100;
+        Damage = 5;
     }
 }
 
@@ -44,3 +58,27 @@ public abstract class Placeable : Item {
 
 }
 
+public sealed class Wood : Item {
+    public Wood() {
+        Icon = ImageHandler.Instance.GetSprite(GetType().Name.ToString());
+        ItemType = GetType();
+    }
+}
+
+public sealed class Stick : Item {
+    public Stick() {
+        Icon = ImageHandler.Instance.GetSprite(GetType().Name.ToString());
+        ItemType = GetType();
+    }
+
+}
+
+public class Fists : Tool {
+    public Fists() {
+        ToolName = "Fists";
+        Durability = Mathf.Infinity;
+        Damage = 2;
+        Range = 5;
+        AttackSpeed = 0.5f;
+    }
+}

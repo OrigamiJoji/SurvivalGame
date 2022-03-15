@@ -7,20 +7,35 @@ public abstract class Attackable : MonoBehaviour {
     public float HitPoints { get; set; }
     public float MaxHitPoints { get; set; }
 
-    [SerializeField] public List<Drops> _drops;
+    public Type TypeReq { get; set; }
+    public int TierReq { get; set; }
 
-    public void TakeDamage(float dmg, PlayerInventory attacker) {
-        HitPoints -= dmg;
+    private None _none = new None();
+
+    [SerializeField] public List<Drop> ItemDrops;
+
+    public void TakeDamage(PlayerInventory attacker) {
+        switch (TierReq) {
+            case 0:
+                HitPoints -= attacker.EquippedItemToolStats.Damage;
+                break;
+            default:
+                if (attacker.EquippedItemToolStats.Tier >= TierReq && attacker.EquippedItemToolStats.ItemType == TypeReq) {
+                    HitPoints -= attacker.EquippedItemToolStats.Damage;
+                }
+                break;
+        }
         if (HitPoints <= 0) {
             Death(attacker);
         }
     }
 
+
     private void Death(PlayerInventory attacker) {
         gameObject.SetActive(false);
-        foreach (Drops drop in _drops) {
-            attacker.PickupItem(Type.GetType(drop.ItemName), UnityEngine.Random.Range(drop.MinQuantity, drop.MaxQuantity));
-            
+        foreach (Drop drop in ItemDrops) {
+            var quantityDrops = UnityEngine.Random.Range(drop.MinQuantity, drop.MaxQuantity + 1);
+            attacker.PickupItem(drop.DroppedItem, quantityDrops);
         }
     }
 
@@ -28,11 +43,21 @@ public abstract class Attackable : MonoBehaviour {
         MaxHitPoints = hitPoints;
         HitPoints = hitPoints;
     }
+
+    public Attackable() {
+        TierReq = 0;
+        TypeReq = Type.GetType("None");
+    }
 }
 
 [System.Serializable]
-public class Drops {
-    [field: SerializeField] public string ItemName { get; set; }
-    [field: SerializeField] public int MinQuantity { get; set; }
-    [field: SerializeField] public int MaxQuantity { get; set; }
+public class Drop {
+    public Item DroppedItem { get; set; }
+    public int MinQuantity { get; set; }
+    public int MaxQuantity { get; set; }
+    public Drop(Item item, int minQuantity, int maxQuantity) {
+        DroppedItem = item;
+        MinQuantity = minQuantity;
+        MaxQuantity = maxQuantity;
+    }
 }

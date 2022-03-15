@@ -4,9 +4,17 @@ using System.Runtime;
 
 public class PlayerInventory : MonoBehaviour {
 
+    [SerializeField] private GameObject _hotbar1;
+    [SerializeField] private GameObject _hotbar2;
+    [SerializeField] private GameObject _hotbar3;
+    [SerializeField] private GameObject _hotbar4;
+    [SerializeField] private GameObject _hotbar5;
+    [SerializeField] private GameObject equippedIcon;
+
     #region Data Members
     private InventorySlot[,] _inventory = new InventorySlot[3, 5];
     private int _totalSlots;
+
 
     private Slot _heldItem = new Slot();
     public Slot HeldItem {
@@ -20,10 +28,10 @@ public class PlayerInventory : MonoBehaviour {
 
 
     public Item EquippedItem { get; set; }
-    public ITool EquippedItemToolStats {
+    public Tool EquippedItemToolStats {
         get {
-            if (EquippedItem is ITool) {
-                return (ITool)EquippedItem;
+            if (EquippedItem is Tool) {
+                return (Tool)EquippedItem;
             }
             else {
                 return new Fists();
@@ -70,17 +78,29 @@ public class PlayerInventory : MonoBehaviour {
 
         HeldItem.Item = new None();
         HeldItem.Quantity = 0;
-        Debug.Log(GetColumn(11));
-        Debug.Log(GetRow(11));
-        Debug.Log(GetPosition(GetRow(11), GetColumn(11)));
+        EquippedItem = new Crafted_Axe();
+    }
+    private void Update() {
+        ChangeItem();
     }
 
-
+    private void ChangeItem() {
+        if(Input.GetKeyDown(KeyCode.Alpha1)) { SelectItem(0, _hotbar1.transform); }
+        else if (Input.GetKeyDown(KeyCode.Alpha2)) { SelectItem(1, _hotbar2.transform); }
+        else if (Input.GetKeyDown(KeyCode.Alpha3)) { SelectItem(2, _hotbar3.transform); }
+        else if (Input.GetKeyDown(KeyCode.Alpha4)) { SelectItem(3, _hotbar4.transform); }
+        else if (Input.GetKeyDown(KeyCode.Alpha5)) { SelectItem(4, _hotbar5.transform); }
+    }
+    private void SelectItem(int column, Transform buttonPos) {
+        var currentSlot = FindSlot(0, column);
+        EquippedItem = currentSlot.Item;
+        equippedIcon.transform.position = buttonPos.position;
+    }
 
     private int ItemPlaceRemainder(InventorySlot inventorySlot) {
-        var itemsInHand = HeldItem.Quantity; // 45 // 2
-        var limit = inventorySlot.Item.MaxStackSize; //64 // 20
-        var itemsInSlot = inventorySlot.Quantity; // 25 // 20
+        var itemsInHand = HeldItem.Quantity;
+        var limit = inventorySlot.Item.MaxStackSize;
+        var itemsInSlot = inventorySlot.Quantity;
         if (itemsInHand + itemsInSlot < limit) {
             // return all items if items in slot and hand are within slot max
             return itemsInHand;
@@ -93,7 +113,6 @@ public class PlayerInventory : MonoBehaviour {
 
     private void SlotAllItems(InventorySlot inventorySlot) {
         var req = ItemPlaceRemainder(inventorySlot);
-        Debug.Log(ItemPlaceRemainder(inventorySlot));
         inventorySlot.Quantity += req;
         HeldItem.Quantity -= req;
         VerifySlot(inventorySlot);
@@ -143,6 +162,7 @@ public class PlayerInventory : MonoBehaviour {
     }
 
     public void PickupItem(Item item, int quantity) {
+        Debug.Log($"Picking up {quantity} of {item}");
         foreach(InventorySlot inventorySlot in _inventory) {
             if(inventorySlot.Item.GetType() == item.ItemType && inventorySlot.Quantity < inventorySlot.Item.MaxStackSize) {
                 if(quantity + inventorySlot.Quantity <= inventorySlot.Item.MaxStackSize) {

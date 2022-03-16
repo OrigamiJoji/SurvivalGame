@@ -4,8 +4,6 @@ using System.Runtime;
 
 public class PlayerInventory : MonoBehaviour {
 
-
-
     #region Data Members
     private InventorySlot[,] _inventory = new InventorySlot[3, 5];
     private int _totalSlots;
@@ -123,7 +121,7 @@ public class PlayerInventory : MonoBehaviour {
             }
         }
         else {
-            if (HeldItem.Item.GetType() == thisItem.ItemType) {
+            if (HeldItem.Item.GetType() == thisItem.ItemType()) {
                 if (HeldItem.Quantity > 0 && inventorySlot.Quantity < inventorySlot.Item.MaxStackSize) {
                     HeldItem.Quantity -= 1;
                     inventorySlot.Quantity += 1;
@@ -157,16 +155,18 @@ public class PlayerInventory : MonoBehaviour {
 
     public void PickupItem(Item item, int quantity) {
         Debug.Log($"Picking up {quantity} of {item}");
+        int s = 0;
         foreach(InventorySlot inventorySlot in _inventory) {
-            if(inventorySlot.Item.GetType() == item.ItemType && inventorySlot.Quantity < inventorySlot.Item.MaxStackSize) {
+            s++;
+            if(inventorySlot.Item.GetType() == item.ItemType() && inventorySlot.Quantity < inventorySlot.Item.MaxStackSize) {
                 if(quantity + inventorySlot.Quantity <= inventorySlot.Item.MaxStackSize) {
                     inventorySlot.Quantity += quantity;
                     break;
                 }
                 else {
                     //if remainder
-                    var diff = currentSearchSlot.Item.MaxStackSize - currentSearchSlot.Quantity;
-                    currentSearchSlot.Quantity += diff;
+                    var diff = inventorySlot.Item.MaxStackSize - inventorySlot.Quantity;
+                    inventorySlot.Quantity += diff;
                     PickupItem(item, quantity -= diff);
                     break;
                 }
@@ -180,10 +180,19 @@ public class PlayerInventory : MonoBehaviour {
         }
     }
 
+    public bool IsOwned(Item item, int quantity) {
+        foreach (InventorySlot inventorySlot in _inventory) {
+            if (inventorySlot.Item.GetType() == item.ItemType() && inventorySlot.Quantity >= quantity) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     #region Action Methods
     public void OnLeftClick(int x, int y) {
         var currentSlot = FindSlot(x, y);
-        if (HeldItem.Item.GetType() == currentSlot.Item.ItemType) {
+        if (HeldItem.Item.ItemType() == currentSlot.Item.ItemType()) {
             SlotAllItems(currentSlot);
         }
         else {
@@ -211,7 +220,7 @@ public class PlayerInventory : MonoBehaviour {
     }
     public string GetSlotData(int row, int column) {
         InventorySlot slot = FindSlot(row, column);
-        return $"{slot.Quantity} of Item: {slot.Item} exists in Position #{slot.Position}. Type: {slot.Item.ItemType}";
+        return $"{slot.Quantity} of Item: {slot.Item} exists in Position #{slot.Position}. Type: {slot.Item.ItemType()}";
     }
 
     public int GetQuantity(int row, int column) {
@@ -232,10 +241,10 @@ public class PlayerInventory : MonoBehaviour {
     }
 
     public Sprite GetSprite() {
-        return HeldItem.Item.Icon;
+        return HeldItem.Item.Icon();
     }
     public Sprite GetSprite(int row, int column) {
-        return _inventory[row, column].Item.Icon;
+        return _inventory[row, column].Item.Icon();
     }
 
     #endregion Public Methods

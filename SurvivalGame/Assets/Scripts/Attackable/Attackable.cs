@@ -17,14 +17,14 @@ public abstract class Attackable : MonoBehaviour {
 
     public void TakeDamage(PlayerInventory attacker) {
         Debug.Log($"A tier {TierReq} {TypeReq} is required");
-        Debug.Log($"A tier {attacker.EquippedItemToolStats.Tier} {attacker.EquippedItemToolStats.ItemType} is equipped");
+        Debug.Log($"A tier {attacker.EquippedItemToolStats.Tier} {attacker.EquippedItemToolStats.ItemType()} is equipped");
         switch (TierReq) {
             case 0:
                 Debug.Log("Hit");
                 HitPoints -= attacker.EquippedItemToolStats.Damage;
                 break;
             default:
-                if (attacker.EquippedItemToolStats.Tier >= TierReq && attacker.EquippedItemToolStats.ItemType.IsSubclassOf(TypeReq)) {
+                if (attacker.EquippedItemToolStats.Tier >= TierReq && attacker.EquippedItemToolStats.ItemType().IsSubclassOf(TypeReq)) {
                     Debug.Log("Hit");
                     HitPoints -= attacker.EquippedItemToolStats.Damage;
                 }

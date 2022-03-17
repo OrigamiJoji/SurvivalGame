@@ -11,6 +11,7 @@ public sealed class PlayerUse : MonoBehaviour
     private PlayerMove _playerMove;
     private PlayerInventory _playerInventory;
     private PlayerLook _playerLook;
+    [SerializeField] private float _useRange;
 
     private bool IsInventoryOpened { get; set; }
 
@@ -33,22 +34,34 @@ public sealed class PlayerUse : MonoBehaviour
     }
 
     private void Update() {
-        if(TimeToAttack > 0) {
+        if (TimeToAttack > 0) {
             TimeToAttack -= Time.deltaTime;
         }
         else { CanAttack = true; }
 
 
-        if(Input.GetMouseButton(0) && CanAttack && !IsInventoryOpened) {
+        if (Input.GetMouseButton(0) && CanAttack && !IsInventoryOpened) {
             TimeToAttack = _playerInventory.EquippedItemToolStats.AttackSpeed;
             CanAttack = false;
-            if(Physics.Raycast(_playerCamera.position, _playerCamera.forward, out RaycastHit hit, _playerInventory.EquippedItemToolStats.Range, _playerMask)) {
+            if (Physics.Raycast(_playerCamera.position, _playerCamera.forward, out RaycastHit hit, _playerInventory.EquippedItemToolStats.Range, _playerMask)) {
                 Debug.DrawRay(_playerCamera.position, _playerCamera.forward, Color.green, 1);
                 GameObject objectHit = hit.collider.gameObject;
                 if (objectHit.CompareTag("Attackable")) {
                     // if Attackable, do damage.
                     Attackable objectAttackable = objectHit.GetComponent<Attackable>();
                     objectAttackable.TakeDamage(_playerInventory);
+                }
+            }
+        }
+
+        if (Input.GetMouseButtonDown(1) && CanAttack && !IsInventoryOpened) {
+            if (Physics.Raycast(_playerCamera.position, _playerCamera.forward, out RaycastHit hit, _useRange, _playerMask)) {
+                Debug.DrawRay(_playerCamera.position, _playerCamera.forward, Color.green, 1);
+                GameObject objectHit = hit.collider.gameObject;
+                if (objectHit.CompareTag("Interactable")) {
+                    // if Attackable, do damage.
+                    Interactable objectInteractable = objectHit.GetComponent<Interactable>();
+                    objectInteractable.Interact();
                 }
             }
         }

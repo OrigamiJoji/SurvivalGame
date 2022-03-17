@@ -4,6 +4,10 @@ using UnityEngine;
 
 public abstract class Interactable : MonoBehaviour
 {
+    protected GameObject ObjectUI { get; set; }
+    protected GameObject TargetUI() {
+        return InteractableUIManager.Instance.GetUI(GetType().Name);
+    }
 
     void Update()
     {
@@ -11,8 +15,21 @@ public abstract class Interactable : MonoBehaviour
     }
 
     public void Interact() {
-        //open gui
-        //
+
+    }
+
+    public void Open() {
+        ObjectUI.SetActive(true);
+    }
+
+    public void Close() {
+        ObjectUI.SetActive(false);
+    }
+
+    public Interactable() {
+        ObjectUI = Instantiate(TargetUI());
+        ObjectUI.transform.parent = gameObject.transform;
+        ObjectUI.SetActive(false);
     }
 }
 

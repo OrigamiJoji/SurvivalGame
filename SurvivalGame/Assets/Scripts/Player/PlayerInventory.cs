@@ -164,7 +164,6 @@ public class PlayerInventory : MonoBehaviour {
                     break;
                 }
                 else {
-                    //if remainder
                     var diff = inventorySlot.Item.MaxStackSize - inventorySlot.Quantity;
                     inventorySlot.Quantity += diff;
                     PickupItem(item, quantity -= diff);

@@ -7,7 +7,7 @@ public abstract class Item {
     public int MaxStackSize { get; protected set; }
     public Sprite Icon() { return ImageHandler.Instance.GetSprite(GetType().Name.ToString()); }
     public Type ItemType() { return GetType(); }
-
+    
     public Item() {
         MaxStackSize = 64;
     }
@@ -82,6 +82,12 @@ public sealed class Stick : Item {
     public Stick() {
     }
 
+}
+
+public sealed class Stone : Item {
+    public Stone() {
+
+    }
 }
 
 #endregion Items

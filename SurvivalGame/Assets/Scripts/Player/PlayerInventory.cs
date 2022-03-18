@@ -52,8 +52,9 @@ public class PlayerInventory : MonoBehaviour {
     private void GenerateSlots() {
         for (int i = _totalSlots; i > 0; i--) {
             InventorySlot inventorySlot = new InventorySlot();
-            inventorySlot.Item = new None();
             inventorySlot.Quantity = 0;
+            inventorySlot.Item = new None();
+
 
             _inventory[GetRow(inventorySlot.Position), GetColumn(inventorySlot.Position)] = inventorySlot;
             Debug.Log($"Item #{inventorySlot.Position} is in position #[{GetRow(inventorySlot.Position)}, {GetColumn(inventorySlot.Position)}] and contains {inventorySlot.Item}. A total of {InventorySlot.TotalSlots} slots exist");
@@ -269,23 +270,3 @@ public class PlayerInventory : MonoBehaviour {
 
 }
 
-#region Slot Class
-
-public class Slot {
-    public Item Item { get; set; }
-    public int Quantity { get; set; }
-}
-
-
-[System.Serializable]
-public class InventorySlot : Slot {
-    public int Position { get; set; }
-    public static int TotalSlots { get; set; }
-
-    public InventorySlot() {
-        Position = TotalSlots;
-        TotalSlots++;
-    }
-}
-
-#endregion Slot Class

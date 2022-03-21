@@ -5,7 +5,26 @@ using System;
 
 
 public class RecipeHandler : MonoBehaviour {
-    private List<Recipe> _craftingRecipes = new List<Recipe>();
+    static RecipeHandler _instance;
+    public static RecipeHandler Instance {
+        get {
+            if (_instance == null) {
+                _instance = FindObjectOfType<RecipeHandler>();
+            }
+            return _instance;
+        }
+    }
+
+
+    private List<Recipe> _recipeList = new List<Recipe>();
+    public List<Recipe> RecipeList {
+        get {
+            return _recipeList;
+        }
+        private set {
+            _recipeList = RecipeList;
+        }
+    }
 
     private void Awake() {
         Type stick = new Stick().GetType();
@@ -14,19 +33,12 @@ public class RecipeHandler : MonoBehaviour {
 
         Type[,] Crafted_AxeRecipe;
         Crafted_AxeRecipe = new Type[,] {
-        { stone, stone, stone },
-        { none, stick, none },
+        { none, stone, stone },
+        { none, stick, stone },
         { none, stick, none }
         };
-        _craftingRecipes.Add(new Recipe("Crafted_Axe", Crafted_AxeRecipe));
-
-
-
-
-
+        RecipeList.Add(new Recipe("Crafted_Axe", Crafted_AxeRecipe));
     }
-
-
 }
 
 
@@ -39,6 +51,7 @@ public class Recipe {
         get { return _schematic; }
         set { _schematic = Schematic; }
     }
+    public Item _Product;
 
     public Recipe(string name, Type[,] schematic) {
         RecipeName = name;

@@ -5,6 +5,10 @@ using UnityEngine;
 public class Slot {
     public Item Item { get; set; }
     public int Quantity { get; set; }
+    public Slot() {
+        Item = new None();
+        Quantity = 0;
+    }
 }
 
 /*

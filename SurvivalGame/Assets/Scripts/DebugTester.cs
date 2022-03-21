@@ -25,6 +25,8 @@ public class DebugTester : MonoBehaviour {
             _playerInventory.PickupItem(new Stick(), 3);
         }
         if (Input.GetKeyDown(KeyCode.F3)) {
+            HeldItem.Instance.Held.Item = new Stick();
+            HeldItem.Instance.Held.Quantity = 4;
         }
         if (Input.GetKeyDown(KeyCode.F4)) {
         }

@@ -26,42 +26,37 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler {
             RightClickFunction();
         }
         else if (eventData.button == PointerEventData.InputButton.Middle) {
-            MiddleClickFunction();
+            //MiddleClickFunction();
         }
     }
 
     public void LeftClickFunction() {
-        //_craftInventory.OnLeftClick(_buttonPositionX, _buttonPositionY);
+        _craftInventory.OnLeftClick(_buttonPositionX, _buttonPositionY);
     }
 
     public void RightClickFunction() {
-        //_craftInventory.OnRightClick(_buttonPositionX, _buttonPositionY);
+        _craftInventory.OnRightClick(_buttonPositionX, _buttonPositionY);
     }
 
     public void MiddleClickFunction() {
         //Debug.Log(_craftInventory.GetSlotData(_buttonPositionX, _buttonPositionY));
-        Debug.Log(_playerInventory.GetSlotData());
     }
 
     private void Update() {
 
-        if (_playerInventory.GetQuantity(_buttonPositionX, _buttonPositionY) > 1) {
-            _quantityText.text = _playerInventory.GetQuantity(_buttonPositionX, _buttonPositionY).ToString();
+        if (_craftInventory.GetQuantity(_buttonPositionX, _buttonPositionY) > 1) {
+            _quantityText.text = _craftInventory.GetQuantity(_buttonPositionX, _buttonPositionY).ToString();
         }
         else {
             _quantityText.text = string.Empty;
         }
 
-        if (_playerInventory.GetItem(_buttonPositionX, _buttonPositionY) is None) {
+        if (_craftInventory.GetItem(_buttonPositionX, _buttonPositionY) is None) {
             _image.gameObject.SetActive(false);
         }
         else {
             _image.gameObject.SetActive(true);
-            _image.sprite = _playerInventory.GetSprite(_buttonPositionX, _buttonPositionY);
+            _image.sprite = _craftInventory.GetSprite(_buttonPositionX, _buttonPositionY);
         }
-    }
-
-    private void UpdateColor() {
-
     }
 }

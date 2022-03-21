@@ -4,27 +4,23 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-public sealed class CraftInventory : MonoBehaviour {
+public sealed class CraftInventory : Inventory {
 
     private RecipeHandler _recipeHandler;
-    private int _totalSlots = 9;
     private Slot[,] _craftingGrid = new Slot[3, 3];
     public Slot[,] CraftingGrid {
         get { return _craftingGrid; }
         set { _craftingGrid = CraftingGrid; }
     }
 
-    private PlayerInventory _playerInventory;
 
     private void Awake() {
         _recipeHandler = RecipeHandler.Instance;
-        _playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
-        // Whew ! Good thing this isn't a multiplayer game.
 
     }
 
     private void Start() {
-        GenerateSlots();
+        GenerateInventory(new Slot[3,3], 9);
     }
 
     private void Update() {
@@ -46,17 +42,6 @@ public sealed class CraftInventory : MonoBehaviour {
                 }
             }
         }
-    }
-
-    private void GenerateSlots() {
-        for (int i = 0; i < _totalSlots; i++) {
-            Slot craftingSlot = new Slot();
-            craftingSlot.Item = new None();
-            craftingSlot.Quantity = 0;
-
-            _craftingGrid[GetRow(i), GetColumn(i)] = craftingSlot;
-        }
-        Debug.Log("Crafting table instantiated");
     }
 
 }

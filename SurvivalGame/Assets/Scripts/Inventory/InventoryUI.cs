@@ -40,8 +40,8 @@ public class InventoryUI : MonoBehaviour, IPointerClickHandler {
     }
 
     public void MiddleClickFunction() {
-        Debug.Log(_playerInventory.GetSlotData(_buttonPositionX, _buttonPositionY));
-        Debug.Log(_playerInventory.GetSlotData());
+        Debug.Log(_playerInventory.FindSlot(_buttonPositionX, _buttonPositionY).Item);
+        Debug.Log(_playerInventory.Debug());
     }
 
     private void Update() {

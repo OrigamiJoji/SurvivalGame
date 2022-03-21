@@ -7,7 +7,7 @@ public class Slot {
     public int Quantity { get; set; }
 }
 
-
+/*
 [System.Serializable]
 public class InventorySlot : Slot {
     public int Position { get; set; }
@@ -28,4 +28,5 @@ public class CraftingSlot : Slot {
         TotalSlots++;
     }
 }
+*/
 

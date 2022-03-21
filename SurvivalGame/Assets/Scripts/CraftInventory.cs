@@ -58,14 +58,6 @@ public sealed class CraftInventory : MonoBehaviour {
         }
         Debug.Log("Crafting table instantiated");
     }
-    private int GetRow(int slotPos) {
-        var row = Mathf.FloorToInt(slotPos / _craftingGrid.GetLength(1));
-        return row;
-    }
-    private int GetColumn(int slotPos) {
-        var column = slotPos % _craftingGrid.GetLength(1);
-        return column;
-    }
 
 }
 

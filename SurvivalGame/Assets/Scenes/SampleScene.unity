@@ -10294,10 +10294,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1768118448}
-  - component: {fileID: 1768118452}
   - component: {fileID: 1768118451}
   - component: {fileID: 1768118450}
   - component: {fileID: 1768118449}
+  - component: {fileID: 1768118452}
   m_Layer: 5
   m_Name: Button (2)
   m_TagString: Untagged
@@ -10418,11 +10418,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1768118447}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cee5042226369c4fbd8b4214d7b5eed, type: 3}
+  m_Script: {fileID: 11500000, guid: 9cfb5236540740a40b37a123946a2b22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _buttonPositionX: 0
-  _buttonPositionY: 2
+  _buttonPositionY: 0
 --- !u!1 &1775848851
 GameObject:
   m_ObjectHideFlags: 0

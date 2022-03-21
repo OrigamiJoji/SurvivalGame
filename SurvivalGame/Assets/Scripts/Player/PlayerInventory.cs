@@ -2,10 +2,10 @@ using UnityEngine;
 using System;
 using System.Runtime;
 
-public class PlayerInventory : MonoBehaviour {
+public class PlayerInventory : Inventory {
 
     #region Data Members
-    private InventorySlot[,] _inventory = new InventorySlot[3, 5];
+    private Slot[,] _inventory = new Slot[3, 5];
     private int _totalSlots;
     public int EquippedSlot { get; set; }
 
@@ -34,32 +34,7 @@ public class PlayerInventory : MonoBehaviour {
     #endregion Data Members
 
 
-    private int GetRow(int slotPos) {
-        var row = Mathf.FloorToInt(slotPos / _inventory.GetLength(1));
-        return row;
-    }
-    private int GetColumn(int slotPos) {
-        var column = slotPos % _inventory.GetLength(1);
-        return column;
-    }
-
-    private int GetPosition(int row, int column) {
-        var pos = row * _inventory.GetLength(1);
-        pos += column;
-        return pos;
-    }
-
-    private void GenerateSlots() {
-        for (int i = _totalSlots; i > 0; i--) {
-            InventorySlot inventorySlot = new InventorySlot();
-            inventorySlot.Quantity = 0;
-            inventorySlot.Item = new None();
-
-
-            _inventory[GetRow(inventorySlot.Position), GetColumn(inventorySlot.Position)] = inventorySlot;
-            Debug.Log($"Item #{inventorySlot.Position} is in position #[{GetRow(inventorySlot.Position)}, {GetColumn(inventorySlot.Position)}] and contains {inventorySlot.Item}. A total of {InventorySlot.TotalSlots} slots exist");
-        }
-    }
+    
 
     private void Start() {
         _totalSlots = _inventory.GetLength(1) * _inventory.GetLength(0);
@@ -181,7 +156,7 @@ public class PlayerInventory : MonoBehaviour {
     }
 
     public bool IsOwned(Item item, int quantity) {
-        foreach (InventorySlot inventorySlot in _inventory) {
+        foreach (Slot inventorySlot in _inventory) {
             if (inventorySlot.Item.GetType() == item.ItemType() && inventorySlot.Quantity >= quantity) {
                 return true;
             }

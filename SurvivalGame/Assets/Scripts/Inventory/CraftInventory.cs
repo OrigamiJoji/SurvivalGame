@@ -22,29 +22,26 @@ public sealed class CraftInventory : Inventory {
     private void TestRecipes() {
         Debug.Log("recipes testing...");
         Type[] craftingGridTypes = new Type[9];
-        Type[] recipes = new Type[9];
         int craftIndex = 0;
         foreach (Slot slot in InventoryGrid) {
             craftingGridTypes[craftIndex] = slot.Item.ItemType();
             craftIndex++;
+            foreach(Type type in craftingGridTypes) {
+                Debug.Log($"Crafting Grid: {type}");
+            }
 
         }
         foreach (Recipe recipe in RecipeHandler.RecipeList) {
             Debug.Log(recipe.RecipeName);
-            int recipeIndex = 0;
+            if (craftingGridTypes.Equals(recipe.Schematic)) {
+                Debug.Log("crafted");
+            }
             foreach (Type type in recipe.Schematic) {
-                recipes[recipeIndex] = type;
-            }
-
-            int y = 0;
-            foreach (Type type in recipes) {
-                Debug.Log(type + y.ToString());
+                Debug.Log($"Recipe: {type}");
             }
         }
 
-        if (craftingGridTypes.Equals(recipes)) {
-            Debug.Log("crafted");
-        }
+
     }
 
     /*

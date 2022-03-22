@@ -25,22 +25,20 @@ public class RecipeHandler : MonoBehaviour {
             _recipeList = RecipeList;
         }
     }
-
+    
     private void Awake() {
+
+    }
+    private void Start() {
         Type stick = new Stick().ItemType();
         Type none = new None().ItemType();
         Type stone = new Stone().ItemType();
 
-        Type[,] Crafted_AxeRecipe;
-        Crafted_AxeRecipe = new Type[,] {
-        { none, stone, stone },
-        { none, stick, stone },
-        { none, stick, none }
-        };
-        RecipeList.Add(new Recipe("Crafted_Axe", Crafted_AxeRecipe));
+        RecipeList.Add(new Recipe("Crafted_Axe", none, stick, none, none, stick, stone, none, stone, stone));
 
-        foreach(Recipe recipe in RecipeList) {
-            foreach(Type type in recipe.Schematic) {
+        foreach (Recipe recipe in RecipeList) {
+            Debug.Log(recipe);
+            foreach (Type type in recipe.Schematic) {
                 Debug.Log(type);
             }
         }
@@ -48,18 +46,29 @@ public class RecipeHandler : MonoBehaviour {
 }
 
 
+
 public class Recipe {
+
     public string RecipeName { get; set; }
-    private Type[,] _schematic = new Type[3, 3];
-    public Type[,] Schematic {
+    private Type[] _schematic = new Type[9];
+    public Type[] Schematic {
         get { return _schematic; }
         set { _schematic = Schematic; }
     }
     public Item _Product;
 
-    public Recipe(string name, Type[,] schematic) {
+
+    public Recipe(string name, Type T0, Type T1, Type T2, Type T3, Type T4, Type T5, Type T6, Type T7, Type T8) {
         RecipeName = name;
-        Schematic = schematic;
+        Schematic[0] = T0;
+        Schematic[1] = T1;
+        Schematic[2] = T2;
+        Schematic[3] = T3;
+        Schematic[4] = T4;
+        Schematic[5] = T5;
+        Schematic[6] = T6;
+        Schematic[7] = T7;
+        Schematic[8] = T8;
     }
 }
 

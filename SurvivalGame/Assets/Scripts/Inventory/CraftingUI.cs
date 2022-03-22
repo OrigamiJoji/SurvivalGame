@@ -13,6 +13,8 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler {
     private CraftInventory _craftInventory;
 
     private void Awake() {
+        _craftInventory = gameObject.GetComponentInParent<CraftInventory>();
+        CraftInventory.UpdateCraftingInventory += UpdateUI;
         _playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
         _quantityText = gameObject.GetComponentInChildren<Text>();
         _image = transform.Find("Image").GetComponent<Image>();
@@ -26,7 +28,7 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler {
             RightClickFunction();
         }
         else if (eventData.button == PointerEventData.InputButton.Middle) {
-            //MiddleClickFunction();
+            MiddleClickFunction();
         }
     }
 
@@ -39,10 +41,10 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler {
     }
 
     public void MiddleClickFunction() {
-        //Debug.Log(_craftInventory.GetSlotData(_buttonPositionX, _buttonPositionY));
+        Debug.Log(_craftInventory.GetSlotData(_buttonPositionX, _buttonPositionY));
     }
 
-    private void Update() {
+    private void UpdateUI() {
 
         if (_craftInventory.GetQuantity(_buttonPositionX, _buttonPositionY) > 1) {
             _quantityText.text = _craftInventory.GetQuantity(_buttonPositionX, _buttonPositionY).ToString();

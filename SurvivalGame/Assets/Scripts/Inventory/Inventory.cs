@@ -4,11 +4,18 @@ using UnityEngine;
 
 public abstract class Inventory : MonoBehaviour
 {
+    public delegate void InventoryEvent();
+
     protected Slot[,] InventoryGrid { get; set; }
     protected int TotalSlots { get; set; }
     protected HeldItem Held {
-        get { return HeldItem.Instance; } }
+        get { return HeldItem.Instance; } 
+    }
 
+    private void Start() {
+        OnChange();
+    }
+    protected abstract void OnChange();
 
     protected int GetRow(int slotPos) {
         var row = Mathf.FloorToInt(slotPos / InventoryGrid.GetLength(1));
@@ -126,6 +133,7 @@ public abstract class Inventory : MonoBehaviour
                 break;
             }
         }
+        OnChange();
     }
 
     public bool IsOwned(Item item, int quantity) {
@@ -157,6 +165,7 @@ public abstract class Inventory : MonoBehaviour
             Debug.Log("Swapped");
             SwapItems(currentSlot);
         }
+        OnChange();
     }
 
     public void OnRightClick(int x, int y) {
@@ -169,6 +178,7 @@ public abstract class Inventory : MonoBehaviour
             SlotOneItem(currentSlot);
             Debug.Log("Slot one");
         }
+        OnChange();
     }
     #endregion Action Methods
 

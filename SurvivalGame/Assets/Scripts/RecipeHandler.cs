@@ -16,8 +16,8 @@ public class RecipeHandler : MonoBehaviour {
     }
 
 
-    private List<Recipe> _recipeList = new List<Recipe>();
-    public List<Recipe> RecipeList {
+    static List<Recipe> _recipeList = new List<Recipe>();
+    public static List<Recipe> RecipeList {
         get {
             return _recipeList;
         }
@@ -27,9 +27,9 @@ public class RecipeHandler : MonoBehaviour {
     }
 
     private void Awake() {
-        Type stick = new Stick().GetType();
-        Type none = new None().GetType();
-        Type stone = new Stone().GetType();
+        Type stick = new Stick().ItemType();
+        Type none = new None().ItemType();
+        Type stone = new Stone().ItemType();
 
         Type[,] Crafted_AxeRecipe;
         Crafted_AxeRecipe = new Type[,] {
@@ -38,14 +38,18 @@ public class RecipeHandler : MonoBehaviour {
         { none, stick, none }
         };
         RecipeList.Add(new Recipe("Crafted_Axe", Crafted_AxeRecipe));
+
+        foreach(Recipe recipe in RecipeList) {
+            foreach(Type type in recipe.Schematic) {
+                Debug.Log(type);
+            }
+        }
     }
 }
 
 
 public class Recipe {
     public string RecipeName { get; set; }
-    public bool Shaped { get; set; }
-
     private Type[,] _schematic = new Type[3, 3];
     public Type[,] Schematic {
         get { return _schematic; }

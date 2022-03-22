@@ -29,6 +29,7 @@ public class DebugTester : MonoBehaviour {
             HeldItem.Instance.Held.Quantity = 4;
         }
         if (Input.GetKeyDown(KeyCode.F4)) {
+            _playerInventory.PickupItem(new Stone(), 3);
         }
         if (Input.GetKeyDown(KeyCode.F5)) {
         }

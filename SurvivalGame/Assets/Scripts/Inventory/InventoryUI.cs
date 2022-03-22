@@ -13,6 +13,7 @@ public class InventoryUI : MonoBehaviour, IPointerClickHandler {
     private Image _buttonImage;
 
     private void Awake() {
+        PlayerInventory.UpdatePlayerInventory += UpdateUI;
         _buttonImage = gameObject.GetComponent<Image>();
         _playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
         _quantityText = gameObject.GetComponentInChildren<Text>();
@@ -44,25 +45,20 @@ public class InventoryUI : MonoBehaviour, IPointerClickHandler {
         Debug.Log(_playerInventory.Debug());
     }
 
-    private void Update() {
-
-       if(_playerInventory.GetQuantity(_buttonPositionX, _buttonPositionY) > 1) {
+    private void UpdateUI() {
+        if (_playerInventory.GetQuantity(_buttonPositionX, _buttonPositionY) > 1) {
             _quantityText.text = _playerInventory.GetQuantity(_buttonPositionX, _buttonPositionY).ToString();
         }
-       else {
+        else {
             _quantityText.text = string.Empty;
         }
 
-       if(_playerInventory.GetItem(_buttonPositionX, _buttonPositionY) is None) {
+        if (_playerInventory.GetItem(_buttonPositionX, _buttonPositionY) is None) {
             _image.gameObject.SetActive(false);
         }
-       else {
+        else {
             _image.gameObject.SetActive(true);
             _image.sprite = _playerInventory.GetSprite(_buttonPositionX, _buttonPositionY);
         }
-    }
-
-    private void UpdateColor() {
-
     }
 }

@@ -17,6 +17,10 @@ public class PlayerInventory : Inventory {
         }
     }
     #endregion Data Members
+    public static event InventoryEvent UpdatePlayerInventory;
+    protected override void OnChange() {
+        UpdatePlayerInventory?.Invoke();
+    }
     private void Awake() {
         GenerateInventory(new Slot[3, 5], 15);
     }

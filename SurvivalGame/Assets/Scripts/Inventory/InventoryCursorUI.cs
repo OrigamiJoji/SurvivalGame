@@ -5,10 +5,8 @@ public class InventoryCursorUI : MonoBehaviour
 {
     private Text _quantityText;
     private Image _image;
-    private PlayerInventory _playerInventory;
 
-    private void Awake() {
-        _playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
+    private void Awake() {     
         _quantityText = gameObject.GetComponentInChildren<Text>();
         _image = transform.Find("Image").GetComponent<Image>();
     }
@@ -16,19 +14,19 @@ public class InventoryCursorUI : MonoBehaviour
     private void Update() {
         gameObject.transform.position = Input.mousePosition;
 
-        if (_playerInventory.GetQuantity() > 1) {
-            _quantityText.text = _playerInventory.GetQuantity().ToString();
+        if (HeldItem.Instance.Held.Quantity > 1) {
+            _quantityText.text = HeldItem.Instance.Held.Quantity.ToString();
         }
         else {
             _quantityText.text = string.Empty;
         }
 
-        if (_playerInventory.GetItem() is None) {
+        if (HeldItem.Instance.Held.Item is None) {
             _image.gameObject.SetActive(false);
         }
         else {
             _image.gameObject.SetActive(true);
-            _image.sprite = _playerInventory.GetSprite();
+            _image.sprite = HeldItem.Instance.Held.Item.Icon();
         }
     }
 

@@ -5,9 +5,13 @@ using UnityEngine;
 public class Slot {
     public Item Item { get; set; }
     public int Quantity { get; set; }
+    public Slot() {
+        Item = new None();
+        Quantity = 0;
+    }
 }
 
-
+/*
 [System.Serializable]
 public class InventorySlot : Slot {
     public int Position { get; set; }
@@ -28,4 +32,5 @@ public class CraftingSlot : Slot {
         TotalSlots++;
     }
 }
+*/
 

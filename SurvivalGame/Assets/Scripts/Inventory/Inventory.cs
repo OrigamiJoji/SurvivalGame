@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Inventory : MonoBehaviour
@@ -10,10 +8,6 @@ public abstract class Inventory : MonoBehaviour
     protected int TotalSlots { get; set; }
     protected HeldItem Held {
         get { return HeldItem.Instance; } 
-    }
-
-    private void Start() {
-        OnChange();
     }
     protected abstract void OnChange();
 

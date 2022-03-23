@@ -1,12 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class Tree : Attackable {
     [SerializeField] private float _treeHP;
-    //[SerializeField] private Type typeReq;
-    [SerializeField] private int tierReq;
     [SerializeField] private int _minDrop;
     [SerializeField] private int _maxDrop;
     private Drop _drops;
@@ -18,5 +13,4 @@ public class Tree : Attackable {
         TierReq = 1;
         SpawnEntity(_treeHP);
     }
-
 }

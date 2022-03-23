@@ -33,6 +33,7 @@ public sealed class PlayerUse : MonoBehaviour
         _fullInventory.SetActive(false);
     }
 
+
     private void Update() {
         if (TimeToAttack > 0) {
             TimeToAttack -= Time.deltaTime;
@@ -62,25 +63,37 @@ public sealed class PlayerUse : MonoBehaviour
                     // if Attackable, do damage.
                     Interactable objectInteractable = objectHit.GetComponent<Interactable>();
                     objectInteractable.Interact();
+                    if(objectInteractable.InUse) { OpenInventory(true); }
+                    else { OpenInventory(false); }
+                    Debug.Log("Interacted");
                 }
             }
         }
 
         if(Input.GetKeyDown(KeyCode.E) && !IsInventoryOpened) {
             //open inv
-            _fullInventory.SetActive(true);
-            IsInventoryOpened = true;
-            Cursor.lockState = CursorLockMode.None;
-            _playerMove.LockMovement(true);
-            _playerLook.LockMouseInput(true);
+            OpenInventory(true);
+
         }
-        else if(Input.GetKeyDown(KeyCode.E) && IsInventoryOpened) {
+        else if((Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Escape)) && IsInventoryOpened) {
             //close inv
-            _fullInventory.SetActive(false);
-            IsInventoryOpened = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            _playerMove.LockMovement(false);
-            _playerLook.LockMouseInput(false);
+            OpenInventory(false);
+        }
+    }
+
+    public void OpenInventory(bool status) {
+        _fullInventory.SetActive(status);
+        IsInventoryOpened = status;
+        _playerMove.LockMovement(status);
+        _playerLook.LockMouseInput(status);
+
+        switch (status) {
+            case false:
+                Cursor.lockState = CursorLockMode.Locked;
+                break;
+            case true:
+                Cursor.lockState = CursorLockMode.None;
+                break;
         }
     }
 

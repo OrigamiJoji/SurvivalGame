@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
@@ -7,68 +5,44 @@ using System.Linq;
 public sealed class CraftInventory : Inventory {
 
     public static event InventoryEvent UpdateCraftingInventory;
+    private PlayerInventory _playerInventory;
+    private void Awake() {
+        _playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
+    }
     protected override void OnChange() {
         UpdateCraftingInventory?.Invoke();
         TestRecipes();
     }
-
     private void Start() {
         GenerateInventory(new Slot[3, 3], 9);
+        OnChange();
     }
 
-    private void Update() {
-
-    }
     private void TestRecipes() {
         Debug.Log("recipes testing...");
         Type[] craftingGridTypes = new Type[9];
         int craftIndex = 0;
         foreach (Slot slot in InventoryGrid) {
             craftingGridTypes[craftIndex] = slot.Item.ItemType();
+            // Debug.Log($"{craftIndex} holds {slot.Item.ItemType()}");
             craftIndex++;
-            foreach(Type type in craftingGridTypes) {
-                Debug.Log($"Crafting Grid: {type}");
-            }
 
         }
         foreach (Recipe recipe in RecipeHandler.RecipeList) {
             Debug.Log(recipe.RecipeName);
-            if (craftingGridTypes.Equals(recipe.Schematic)) {
-                Debug.Log("crafted");
-            }
-            foreach (Type type in recipe.Schematic) {
-                Debug.Log($"Recipe: {type}");
+            if (recipe.Schematic.SequenceEqual(craftingGridTypes)) {
+                Debug.Log("Crafted");
+                foreach (Slot slot in InventoryGrid) {
+                    slot.Item = new None();
+                    slot.Quantity = 0;
+                }
+                _playerInventory.PickupItem(recipe.Product, recipe.Quantity);
+                OnChange();
             }
         }
 
 
     }
-
-    /*
-
-                if (CraftingGrid[r, c].Item.ItemType().Equals(recipe.Schematic[r, c])) {
-                    if (r.Equals(3) && c.Equals(3)) {
-                        Debug.Log("recipe correct");
-                    }
-                    continue;
-                }
-                else {
-                    break;
-
-                Debug.Log(recipe.RecipeName);
-            for (int r = 0; r < 3; r++) {
-                for (int c = 0; c < 3; c++) {
-                    Debug.Log(c + " " + r);
-                    if(InventoryGrid[r, c].Item.Equals(recipe.Schematic[r, c])) {
-                        if (r.Equals(3) && c.Equals(3)) { Debug.Log("Crafted"); }
-                        continue;
-                    }
-                    break;
-                }
-            }
-    */
-
-
 }
 
 

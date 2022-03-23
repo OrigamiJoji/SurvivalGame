@@ -96,7 +96,7 @@ public sealed class Fists : Tool {
     public Fists() {
         Durability = Mathf.Infinity;
         Damage = 2;
-        Range = 5;
+        Range = 4f;
         AttackSpeed = 0.5f;
     }
 }

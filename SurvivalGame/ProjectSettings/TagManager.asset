@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Attackable
   - Material
+  - Interactable
   layers:
   - Default
   - TransparentFX

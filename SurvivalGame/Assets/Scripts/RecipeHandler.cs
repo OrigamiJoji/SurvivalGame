@@ -26,15 +26,13 @@ public class RecipeHandler : MonoBehaviour {
         }
     }
     
-    private void Awake() {
-
-    }
     private void Start() {
         Type stick = new Stick().ItemType();
         Type none = new None().ItemType();
         Type stone = new Stone().ItemType();
 
-        RecipeList.Add(new Recipe("Crafted_Axe", none, stick, none, none, stick, stone, none, stone, stone));
+        RecipeList.Add(new Recipe("Crafted_Axe", none, stick, none, none, stick, stone, none, stone, stone, new Crafted_Axe(), 1));
+
 
         foreach (Recipe recipe in RecipeList) {
             Debug.Log(recipe);
@@ -55,10 +53,11 @@ public class Recipe {
         get { return _schematic; }
         set { _schematic = Schematic; }
     }
-    public Item _Product;
+    public Item Product { get; private set; }
+    public int Quantity { get; private set; }
 
 
-    public Recipe(string name, Type T0, Type T1, Type T2, Type T3, Type T4, Type T5, Type T6, Type T7, Type T8) {
+    public Recipe(string name, Type T0, Type T1, Type T2, Type T3, Type T4, Type T5, Type T6, Type T7, Type T8, Item product, int quantity) {
         RecipeName = name;
         Schematic[0] = T0;
         Schematic[1] = T1;
@@ -69,6 +68,8 @@ public class Recipe {
         Schematic[6] = T6;
         Schematic[7] = T7;
         Schematic[8] = T8;
+        Product = product;
+        Quantity = quantity;
     }
 }
 

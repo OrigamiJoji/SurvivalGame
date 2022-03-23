@@ -26,15 +26,13 @@ public class RecipeHandler : MonoBehaviour {
         }
     }
     
-    private void Awake() {
-
-    }
     private void Start() {
         Type stick = new Stick().ItemType();
         Type none = new None().ItemType();
         Type stone = new Stone().ItemType();
 
         RecipeList.Add(new Recipe("Crafted_Axe", none, stick, none, none, stick, stone, none, stone, stone, new Crafted_Axe(), 1));
+
 
         foreach (Recipe recipe in RecipeList) {
             Debug.Log(recipe);
@@ -72,7 +70,6 @@ public class Recipe {
         Schematic[8] = T8;
         Product = product;
         Quantity = quantity;
-        
     }
 }
 

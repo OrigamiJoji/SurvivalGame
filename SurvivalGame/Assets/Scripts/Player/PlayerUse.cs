@@ -63,6 +63,8 @@ public sealed class PlayerUse : MonoBehaviour
                     // if Attackable, do damage.
                     Interactable objectInteractable = objectHit.GetComponent<Interactable>();
                     objectInteractable.Interact();
+                    if(objectInteractable.InUse) { OpenInventory(true); }
+                    else { OpenInventory(false); }
                     Debug.Log("Interacted");
                 }
             }
@@ -70,29 +72,26 @@ public sealed class PlayerUse : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.E) && !IsInventoryOpened) {
             //open inv
+            OpenInventory(true);
 
         }
-        else if(Input.GetKeyDown(KeyCode.E) && IsInventoryOpened) {
+        else if((Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Escape)) && IsInventoryOpened) {
             //close inv
-            _fullInventory.SetActive(false);
-            IsInventoryOpened = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            _playerMove.LockMovement(false);
-            _playerLook.LockMouseInput(false);
+            OpenInventory(false);
         }
     }
 
-    private void OpenInventory(bool status) {
+    public void OpenInventory(bool status) {
         _fullInventory.SetActive(status);
         IsInventoryOpened = status;
         _playerMove.LockMovement(status);
         _playerLook.LockMouseInput(status);
 
         switch (status) {
-            case true:
+            case false:
                 Cursor.lockState = CursorLockMode.Locked;
                 break;
-            case false:
+            case true:
                 Cursor.lockState = CursorLockMode.None;
                 break;
         }

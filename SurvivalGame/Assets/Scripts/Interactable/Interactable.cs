@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Interactable : MonoBehaviour {
-    protected bool InUse { get; set; }
+    public bool InUse { get; set; }
     protected GameObject ObjectUI {
         get {
             return InteractableUIManager.Instance.GetUI(GetType().Name);
@@ -24,7 +24,6 @@ public abstract class Interactable : MonoBehaviour {
     }
     protected void Open() {
         ObjectUI.SetActive(true);
-        InventoryUI.SetActive(true);
         InUse = true;
     }
 

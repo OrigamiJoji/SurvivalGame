@@ -39,14 +39,7 @@ public class PlayerInventory : Inventory {
 
 
     private void Start() {
-
-        FindSlot(0, 1).Item = new Crafted_Axe();
-        FindSlot(0, 1).Quantity = 1;
-
-        FindSlot(1, 3).Item = new Stick();
-        FindSlot(1, 3).Quantity = 20;
-
-        EquippedItem = new Crafted_Axe();
+        OnChange();
     }
 
     private void Update() {

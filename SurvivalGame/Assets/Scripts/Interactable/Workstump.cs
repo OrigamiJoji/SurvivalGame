@@ -4,14 +4,4 @@ using UnityEngine;
 
 public sealed class Workstump : Interactable
 {
-    
-
-    void Update()
-    {
-        
-    }
-
-    new public void Interact() {
-
-    }
 }

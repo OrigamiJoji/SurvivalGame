@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public sealed class Foundry : Interactable {
-
-    void Update()
-    {
-        
+    private FoundryInventory ThisInv {
+        get { return gameObject.GetComponent<FoundryInventory>(); }
     }
+    public static event UpdateInventoryCaller<FoundryInventory> UpdateFoundry;
 
-    new public void Interact() {
-
+    protected override void UpdateCaller() {
+        UpdateFoundry?.Invoke(ThisInv);
+        Debug.Log("Caller Updated");
     }
 }

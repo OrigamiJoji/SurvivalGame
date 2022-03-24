@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class CraftingUI : MonoBehaviour, IPointerClickHandler {
+public sealed class InventoryUI : MonoBehaviour, IPointerClickHandler {
 
     [SerializeField] private int _buttonPositionX;
     [SerializeField] private int _buttonPositionY;
@@ -10,11 +10,11 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler {
     private Text _quantityText;
     private Image _image;
     private PlayerInventory _playerInventory;
-    private CraftInventory _craftInventory;
+    private Image _buttonImage;
 
     private void Awake() {
-        _craftInventory = gameObject.GetComponentInParent<CraftInventory>();
-        CraftInventory.UpdateCraftingInventory += UpdateUI;
+        PlayerInventory.UpdatePlayerInventory += UpdateUI;
+        _buttonImage = gameObject.GetComponent<Image>();
         _playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
         _quantityText = gameObject.GetComponentInChildren<Text>();
         _image = transform.Find("Image").GetComponent<Image>();
@@ -27,38 +27,38 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler {
         else if (eventData.button == PointerEventData.InputButton.Right) {
             RightClickFunction();
         }
-        else if (eventData.button == PointerEventData.InputButton.Middle) {
+        else if(eventData.button == PointerEventData.InputButton.Middle) {
             MiddleClickFunction();
         }
     }
 
     public void LeftClickFunction() {
-        _craftInventory.OnLeftClick(_buttonPositionX, _buttonPositionY);
+        _playerInventory.OnLeftClick(_buttonPositionX, _buttonPositionY);
     }
 
     public void RightClickFunction() {
-        _craftInventory.OnRightClick(_buttonPositionX, _buttonPositionY);
+        _playerInventory.OnRightClick(_buttonPositionX, _buttonPositionY);
     }
 
     public void MiddleClickFunction() {
-        Debug.Log(_craftInventory.GetSlotData(_buttonPositionX, _buttonPositionY));
+        Debug.Log(_playerInventory.FindSlot(_buttonPositionX, _buttonPositionY).Item);
+        Debug.Log(_playerInventory.Debug());
     }
 
     private void UpdateUI() {
-
-        if (_craftInventory.GetQuantity(_buttonPositionX, _buttonPositionY) > 1) {
-            _quantityText.text = _craftInventory.GetQuantity(_buttonPositionX, _buttonPositionY).ToString();
+        if (_playerInventory.GetQuantity(_buttonPositionX, _buttonPositionY) > 1) {
+            _quantityText.text = _playerInventory.GetQuantity(_buttonPositionX, _buttonPositionY).ToString();
         }
         else {
             _quantityText.text = string.Empty;
         }
 
-        if (_craftInventory.GetItem(_buttonPositionX, _buttonPositionY) is None) {
+        if (_playerInventory.GetItem(_buttonPositionX, _buttonPositionY) is None) {
             _image.gameObject.SetActive(false);
         }
         else {
             _image.gameObject.SetActive(true);
-            _image.sprite = _craftInventory.GetSprite(_buttonPositionX, _buttonPositionY);
+            _image.sprite = _playerInventory.GetSprite(_buttonPositionX, _buttonPositionY);
         }
     }
 }

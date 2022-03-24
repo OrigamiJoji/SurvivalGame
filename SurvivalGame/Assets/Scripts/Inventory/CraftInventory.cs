@@ -5,11 +5,12 @@ using System.Linq;
 public sealed class CraftInventory : Inventory {
 
     public static event InventoryEvent UpdateCraftingInventory;
+
     private PlayerInventory _playerInventory;
     private void Awake() {
         _playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
     }
-    protected override void OnChange() {
+    public override void OnChange() {
         UpdateCraftingInventory?.Invoke();
         TestRecipes();
     }
@@ -19,7 +20,6 @@ public sealed class CraftInventory : Inventory {
     }
 
     private void TestRecipes() {
-        Debug.Log("recipes testing...");
         Type[] craftingGridTypes = new Type[9];
         int craftIndex = 0;
         foreach (Slot slot in InventoryGrid) {
@@ -29,7 +29,6 @@ public sealed class CraftInventory : Inventory {
 
         }
         foreach (Recipe recipe in RecipeHandler.RecipeList) {
-            Debug.Log(recipe.RecipeName);
             if (recipe.Schematic.SequenceEqual(craftingGridTypes)) {
                 Debug.Log("Crafted");
                 foreach (Slot slot in InventoryGrid) {

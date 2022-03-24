@@ -13,11 +13,15 @@ public class CraftingUI : MonoBehaviour, IPointerClickHandler {
     private CraftInventory _craftInventory;
 
     private void Awake() {
-        _craftInventory = gameObject.GetComponentInParent<CraftInventory>();
         CraftInventory.UpdateCraftingInventory += UpdateUI;
+        Workstump.UpdateCraft += UpdateCraft;
         _playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
         _quantityText = gameObject.GetComponentInChildren<Text>();
         _image = transform.Find("Image").GetComponent<Image>();
+    }
+
+    private void UpdateCraft(CraftInventory craftInventory) {
+        _craftInventory = craftInventory;
     }
 
     public void OnPointerClick(PointerEventData eventData) {

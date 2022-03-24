@@ -5,11 +5,12 @@ using System.Linq;
 public sealed class CraftInventory : Inventory {
 
     public static event InventoryEvent UpdateCraftingInventory;
+
     private PlayerInventory _playerInventory;
     private void Awake() {
         _playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
     }
-    protected override void OnChange() {
+    public override void OnChange() {
         UpdateCraftingInventory?.Invoke();
         TestRecipes();
     }

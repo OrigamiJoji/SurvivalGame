@@ -7,7 +7,7 @@ public abstract class Item {
     public int MaxStackSize { get; protected set; }
     public Sprite Icon() { return ImageHandler.Instance.GetSprite(GetType().Name.ToString()); }
     public Type ItemType() { return GetType(); }
-    
+
     public Item() {
         MaxStackSize = 64;
     }
@@ -25,23 +25,13 @@ public abstract class Tool : Item {
     }
 }
 
-public abstract class Axe : Tool {
-    public Axe() {
-        Range = 1f;
-        AttackSpeed = 1.5f;
-    }
-}
-
-
 public abstract class Sword : Tool {
     public Sword() {
 
     }
 }
 
-public abstract class Pickaxe : Tool {
 
-}
 
 public abstract class Placeable : Item {
 
@@ -49,7 +39,13 @@ public abstract class Placeable : Item {
 
 #endregion Archetypes
 
-#region Tools
+#region Axe 
+public abstract class Axe : Tool {
+    public Axe() {
+        Range = 1f;
+        AttackSpeed = 1f;
+    }
+}
 
 public sealed class Crafted_Axe : Axe {
     public Crafted_Axe() {
@@ -59,36 +55,67 @@ public sealed class Crafted_Axe : Axe {
     }
 }
 
-public class Crafted_Pickaxe : Pickaxe {
-    public Crafted_Pickaxe() {
-        MaxStackSize = 1;
-        Durability = 100;
-        Damage = 5;
-        Range = 6;
-        AttackSpeed = 0.8f;
+public sealed class Copper_Axe : Axe {
+    public Copper_Axe() {
+        Tier = 2;
+        Durability = 150;
+        Damage = 6;
     }
 }
 
-#endregion Tools
+public sealed class Iron_Axe : Axe {
+    public Iron_Axe() {
+        Tier = 3;
+        Durability = 250;
+        Damage = 7.5f;
+    }
+}
+
+#endregion Axe
+
+#region Pickaxe
+
+public abstract class Pickaxe : Tool {
+    public Pickaxe() {
+        Range = 1f;
+        AttackSpeed = 1.5f;
+    }
+}
+
+public sealed class Crafted_Pickaxe : Pickaxe {
+    public Crafted_Pickaxe() {
+        Tier = 1;
+        Durability = 100;
+        Damage = 4;
+    }
+}
+
+public sealed class Copper_Pickaxe : Pickaxe {
+    public Copper_Pickaxe() {
+        Tier = 2;
+        Durability = 150f;
+        Damage = 5;
+    }
+}
+
+public class Iron_Pickaxe : Pickaxe {
+    public Iron_Pickaxe() {
+        Tier = 3;
+        Durability = 250f;
+        Damage = 6.5f;
+    }
+}
+
+#endregion Pickaxe
 
 #region Items
-
-public sealed class Wood : Item {
-    public Wood() {
-    }
-}
-
-public sealed class Stick : Item {
-    public Stick() {
-    }
-
-}
-
-public sealed class Stone : Item {
-    public Stone() {
-
-    }
-}
+public sealed class Wood : Item { }
+public sealed class Stick : Item { }
+public sealed class Stone : Item { }
+public sealed class Iron_Ore : Item { }
+public sealed class Iron_Bar : Item { }
+public sealed class Copper_Ore : Item { }
+public sealed class Copper_Bar : Item { }
 
 #endregion Items
 

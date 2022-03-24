@@ -18,7 +18,7 @@ public class PlayerInventory : Inventory {
     }
     #endregion Data Members
     public static event InventoryEvent UpdatePlayerInventory;
-    protected override void OnChange() {
+    public override void OnChange() {
         UpdatePlayerInventory?.Invoke();
     }
     private void Awake() {

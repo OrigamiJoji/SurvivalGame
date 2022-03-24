@@ -9,7 +9,7 @@ public abstract class Inventory : MonoBehaviour
     protected HeldItem Held {
         get { return HeldItem.Instance; } 
     }
-    protected abstract void OnChange();
+    public abstract void OnChange();
 
     protected int GetRow(int slotPos) {
         var row = Mathf.FloorToInt(slotPos / InventoryGrid.GetLength(1));

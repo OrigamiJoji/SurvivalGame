@@ -38,13 +38,6 @@ public class RecipeHandler : MonoBehaviour {
 
         RecipeList.Add(new Recipe("Crafted_Pickaxe", none, stick, none, none, stick, none, stone, stone, stone, new Crafted_Pickaxe(), 1));
         RecipeList.Add(new Recipe("Copper_Pickaxe", none, wood, none, none, wood, none, cBar, cBar, cBar, new Copper_Pickaxe(), 1));
-
-        foreach (Recipe recipe in RecipeList) {
-            Debug.Log(recipe);
-            foreach (Type type in recipe.Schematic) {
-                Debug.Log(type);
-            }
-        }
     }
 }
 

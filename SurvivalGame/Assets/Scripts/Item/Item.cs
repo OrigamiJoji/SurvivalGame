@@ -109,8 +109,12 @@ public class Iron_Pickaxe : Pickaxe {
 #endregion Pickaxe
 
 #region Items
-public sealed class Wood : Item { }
-public sealed class Stick : Item { }
+public sealed class Wood : Item, IFlammable {
+    public double SmeltTime { get { return 50; } }
+}
+public sealed class Stick : Item, IFlammable {
+    public double SmeltTime { get { return 15; } }
+}
 public sealed class Stone : Item { }
 public sealed class Iron_Ore : Item { }
 public sealed class Iron_Bar : Item { }

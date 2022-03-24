@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InventoryCursorUI : MonoBehaviour
+public sealed class InventoryCursorUI : MonoBehaviour
 {
     private Text _quantityText;
     private Image _image;

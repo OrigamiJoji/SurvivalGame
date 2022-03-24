@@ -20,7 +20,6 @@ public sealed class CraftInventory : Inventory {
     }
 
     private void TestRecipes() {
-        Debug.Log("recipes testing...");
         Type[] craftingGridTypes = new Type[9];
         int craftIndex = 0;
         foreach (Slot slot in InventoryGrid) {
@@ -30,7 +29,6 @@ public sealed class CraftInventory : Inventory {
 
         }
         foreach (Recipe recipe in RecipeHandler.RecipeList) {
-            Debug.Log(recipe.RecipeName);
             if (recipe.Schematic.SequenceEqual(craftingGridTypes)) {
                 Debug.Log("Crafted");
                 foreach (Slot slot in InventoryGrid) {

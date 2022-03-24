@@ -7,7 +7,6 @@ public class DebugTester : MonoBehaviour {
     private PlayerMove _playerMove;
     private PlayerLook _playerLook;
     private PlayerUse _playerUse;
-    public GameObject craftingMenu;
 
     private void Awake() {
         var player = GameObject.Find("Player");
@@ -31,15 +30,6 @@ public class DebugTester : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.F4)) {
             _playerInventory.PickupItem(new Stone(), 3);
-        }
-        if(Input.GetKeyDown(KeyCode.C)) {
-            if(craftingMenu.activeSelf) {
-                craftingMenu.SetActive(false);
-            }
-            else {
-                craftingMenu.SetActive(true);
-            }
-
         }
         /*
         if (Input.GetKeyDown(KeyCode.F5)) {

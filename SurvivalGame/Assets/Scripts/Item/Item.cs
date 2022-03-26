@@ -118,7 +118,9 @@ public sealed class Stick : Item, IFlammable {
 public sealed class Stone : Item { }
 public sealed class Iron_Ore : Item { }
 public sealed class Iron_Bar : Item { }
-public sealed class Copper_Ore : Item { }
+public sealed class Copper_Ore : Item, ISmeltable {
+    public Item Product { get { return new Copper_Bar(); } }
+}
 public sealed class Copper_Bar : Item { }
 
 #endregion Items

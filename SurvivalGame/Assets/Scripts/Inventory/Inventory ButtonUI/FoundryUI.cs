@@ -13,6 +13,7 @@ public class FoundryUI : MonoBehaviour, IPointerClickHandler {
 
     private void Awake() {
         Foundry.UpdateFoundry += UpdateFoundry;
+        FoundryInventory.UpdateFoundryInventory += UpdateUI;
         _quantityText = gameObject.GetComponentInChildren<Text>();
         _image = transform.Find("Image").GetComponent<Image>();
     }

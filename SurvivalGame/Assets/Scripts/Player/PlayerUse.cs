@@ -71,12 +71,10 @@ public sealed class PlayerUse : MonoBehaviour
         }
 
         if(Input.GetKeyDown(KeyCode.E) && !IsInventoryOpened) {
-            //open inv
             OpenInventory(true);
 
         }
         else if((Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Escape)) && IsInventoryOpened) {
-            //close inv
             OpenInventory(false);
         }
     }
@@ -89,6 +87,9 @@ public sealed class PlayerUse : MonoBehaviour
 
         switch (status) {
             case false:
+                _playerInventory.PickupItem(HeldItem.Instance.Held.Item, HeldItem.Instance.Held.Quantity);
+                HeldItem.Instance.Held.Item = new None();
+                HeldItem.Instance.Held.Quantity = 0;
                 Cursor.lockState = CursorLockMode.Locked;
                 break;
             case true:

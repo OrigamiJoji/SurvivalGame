@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public sealed class FoundryInventory : Inventory {
-    [field: SerializeField] public double CurrentSmeltingTime { get; private set; }
-    public double MaxSmeltingTime { get { return 75; } }
+    [field: SerializeField]
+
+    private double _currentSmeltingTime;
+    public double CurrentSmeltingTime { get; private set; }
+    public double MaxSmeltingTime { get { return 16; } }
 
     public static event InventoryEvent UpdateFoundryInventory;
+    private Coroutine SmeltOnce;
 
     private void Start() {
         GenerateInventory(new Slot[2, 2], 4);
@@ -15,10 +19,6 @@ public sealed class FoundryInventory : Inventory {
         UpdateFoundryInventory?.Invoke();
     }
 
-
-    private void Smelt() {
-
-    }
 
     private void Update() {
         if (InventoryGrid[0, 0].Item is IFlammable itemFlammable) {
@@ -31,18 +31,26 @@ public sealed class FoundryInventory : Inventory {
         }
         if (InventoryGrid[1, 0].Item is ISmeltable itemSmeltable) {
             if (CurrentSmeltingTime > 0) {
-                StartCoroutine(Smelt(itemSmeltable));
+                if (SmeltOnce == null) {
+                    SmeltOnce = StartCoroutine(Smelt(itemSmeltable));
+                }
             }
         }
     }
 
 
     private IEnumerator Smelt(ISmeltable itemSmeltable) {
-        double timeRemaining = 8;
+        Debug.Log("executed smelt");
+        double timeRemaining = 4;
         while (timeRemaining > 0) {
             timeRemaining -= Time.deltaTime;
             CurrentSmeltingTime -= Time.deltaTime;
             yield return null;
+        }
+        if (CurrentSmeltingTime <= 0) {
+            CurrentSmeltingTime = 0;
+            SmeltOnce = null;
+            yield break;
         }
         if (InventoryGrid[0, 1].Item is None) {
             InventoryGrid[0, 1].Item = itemSmeltable.Product;
@@ -54,6 +62,7 @@ public sealed class FoundryInventory : Inventory {
         }
         InventoryGrid[0, 1].Quantity++;
         UpdateFoundryInventory?.Invoke();
+        SmeltOnce = null;
         yield break;
     }
 }

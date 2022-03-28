@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-#region Archetypes
+#region Archetype
 
 public abstract class Item {
     public int MaxStackSize { get; protected set; }
@@ -35,9 +35,16 @@ public abstract class Sword : Tool {
 
 public abstract class Placeable : Item {
 
+    public GameObject PlacableModel;
+    public GameObject UnplacableModel;
+
+    public void Place() {
+
+    }
+
 }
 
-#endregion Archetypes
+#endregion Archetype
 
 #region Axe 
 public abstract class Axe : Tool {
@@ -110,13 +117,15 @@ public class Iron_Pickaxe : Pickaxe {
 
 #region Items
 public sealed class Wood : Item, IFlammable {
-    public double SmeltTime { get { return 50; } }
+    public double SmeltTime { get { return 6; } }
 }
 public sealed class Stick : Item, IFlammable {
-    public double SmeltTime { get { return 15; } }
+    public double SmeltTime { get { return 2; } }
 }
 public sealed class Stone : Item { }
-public sealed class Iron_Ore : Item { }
+public sealed class Iron_Ore : Item, ISmeltable { 
+    public Item Product { get { return new Iron_Bar(); } }
+}
 public sealed class Iron_Bar : Item { }
 public sealed class Copper_Ore : Item, ISmeltable {
     public Item Product { get { return new Copper_Bar(); } }

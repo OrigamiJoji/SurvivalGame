@@ -16,6 +16,16 @@ public class PlayerInventory : Inventory {
             }
         }
     }
+    public Placeable EquippedItemPlaceable {
+        get {
+            if (EquippedItem is Placeable placeable) {
+                return placeable;
+            }
+            else {
+                throw new NullReferenceException();
+            }
+        }
+    }
     #endregion Data Members
     public static event InventoryEvent UpdatePlayerInventory;
     public override void OnChange() {

@@ -16,29 +16,28 @@ public class PlayerInventory : Inventory {
             }
         }
     }
-    public Placeable EquippedItemPlaceable {
+    private int _equippedSlotNum;
+    public Slot EquippedItemSlot {
         get {
-            if (EquippedItem is Placeable placeable) {
-                return placeable;
-            }
-            else {
-                throw new NullReferenceException();
-            }
+            return FindSlot(0, _equippedSlotNum);
         }
     }
     #endregion Data Members
     public static event InventoryEvent UpdatePlayerInventory;
     public override void OnChange() {
         UpdatePlayerInventory?.Invoke();
+        SelectItem(_equippedSlotNum);
     }
     private void Awake() {
         GenerateInventory(new Slot[3, 5], 15);
+        PickupItem(new Workstump_(), 1);
     }
 
     private void ChangeItem() {
         for (int i = 0; i < 5; i++) {
             if (Input.GetKeyDown(KeyCode.Alpha1 + i)) {
                 SelectItem(i);
+                _equippedSlotNum = i;
             }
         }
     }

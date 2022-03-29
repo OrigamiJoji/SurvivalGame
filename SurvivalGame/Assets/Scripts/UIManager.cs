@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour {
 
     [SerializeField] private Text _targetText;
     [SerializeField] private Slider _targetHealthSlider;
+    [SerializeField] private Slider _durabilitySlider;
     [SerializeField] private Text _targetHealthText;
     [SerializeField] private Text _equippedItemText;
 
@@ -43,6 +44,15 @@ public class UIManager : MonoBehaviour {
     void Update() {
 
         UpdateSlot();
+        if(!(_playerInventory.EquippedItemToolStats is Fists)) {
+            _durabilitySlider.gameObject.SetActive(true);
+            _durabilitySlider.maxValue = _playerInventory.EquippedItemToolStats.MaxDurability;
+            _durabilitySlider.value = _playerInventory.EquippedItemToolStats.Durability;
+        } 
+        else {
+            _durabilitySlider.gameObject.SetActive(false);
+        }
+
         if (_playerInventory.EquippedItem is None) {
             _equippedItemText.text = string.Empty;
         }

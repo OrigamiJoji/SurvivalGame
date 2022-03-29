@@ -34,12 +34,14 @@ public class DebugTester : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.F5)) {
             _playerInventory.PickupItem(new Crafted_Pickaxe(), 1);
         }
-
-        /*
         if (Input.GetKeyDown(KeyCode.F6)) {
+            _playerInventory.PickupItem(new Workstump_(), 1);
         }
         if (Input.GetKeyDown(KeyCode.F7)) {
+            _playerInventory.PickupItem(new Foundry_(), 1);
         }
+
+        /*
         if (Input.GetKeyDown(KeyCode.F8)) {
         }
         if (Input.GetKeyDown(KeyCode.F9)) {

@@ -16,6 +16,7 @@ public abstract class Item {
 public abstract class Tool : Item {
     public int Tier { get; protected set; }
     public string ToolName() { return GetType().Name.Replace("_", " "); }
+    public float MaxDurability { get; set; }
     public float Durability { get; set; }
     public float Damage { get; set; }
     public double AttackSpeed { get; protected set; }
@@ -34,17 +35,25 @@ public abstract class Sword : Tool {
 
 
 public abstract class Placeable : Item {
-
-    public GameObject PlacableModel;
-    public GameObject UnplacableModel;
-
-    public void Place() {
-
-    }
-
+    public abstract GameObject Object();
 }
 
 #endregion Archetype
+
+public sealed class Workstump_ : Placeable {
+    static GameObject thisObj = GameObject.Find("Workstump");
+    public override GameObject Object() {
+        return thisObj;
+    }
+}
+
+public sealed class Foundry_ : Placeable {
+    static GameObject thisObj = GameObject.Find("Foundry");
+    public override GameObject Object() {
+        return thisObj;
+    }
+}
+
 
 #region Axe 
 public abstract class Axe : Tool {
@@ -57,7 +66,8 @@ public abstract class Axe : Tool {
 public sealed class Crafted_Axe : Axe {
     public Crafted_Axe() {
         Tier = 1;
-        Durability = 100;
+        MaxDurability = 100f;
+        Durability = 100f;
         Damage = 5;
     }
 }
@@ -65,7 +75,8 @@ public sealed class Crafted_Axe : Axe {
 public sealed class Copper_Axe : Axe {
     public Copper_Axe() {
         Tier = 2;
-        Durability = 150;
+        MaxDurability = 150f;
+        Durability = 150f;
         Damage = 6;
     }
 }
@@ -73,7 +84,8 @@ public sealed class Copper_Axe : Axe {
 public sealed class Iron_Axe : Axe {
     public Iron_Axe() {
         Tier = 3;
-        Durability = 250;
+        MaxDurability = 250f;
+        Durability = 250f;
         Damage = 7.5f;
     }
 }
@@ -92,6 +104,7 @@ public abstract class Pickaxe : Tool {
 public sealed class Crafted_Pickaxe : Pickaxe {
     public Crafted_Pickaxe() {
         Tier = 1;
+        MaxDurability = 100;
         Durability = 100;
         Damage = 4;
     }
@@ -100,6 +113,7 @@ public sealed class Crafted_Pickaxe : Pickaxe {
 public sealed class Copper_Pickaxe : Pickaxe {
     public Copper_Pickaxe() {
         Tier = 2;
+        MaxDurability = 150f;
         Durability = 150f;
         Damage = 5;
     }
@@ -108,6 +122,7 @@ public sealed class Copper_Pickaxe : Pickaxe {
 public class Iron_Pickaxe : Pickaxe {
     public Iron_Pickaxe() {
         Tier = 3;
+        MaxDurability = 250f;
         Durability = 250f;
         Damage = 6.5f;
     }
@@ -116,7 +131,7 @@ public class Iron_Pickaxe : Pickaxe {
 #endregion Pickaxe
 
 #region Items
-public sealed class Wood : Item, IFlammable {
+public sealed class Oak_Wood : Item, IFlammable {
     public double SmeltTime { get { return 6; } }
 }
 public sealed class Stick : Item, IFlammable {

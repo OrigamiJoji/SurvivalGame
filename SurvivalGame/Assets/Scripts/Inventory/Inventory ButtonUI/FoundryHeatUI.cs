@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +7,7 @@ public class FoundryHeatUI : MonoBehaviour {
     private FoundryInventory _foundryInventory;
 
     private void Awake() {
-        Foundry.UpdateFoundry += UpdateFoundry;
+        FoundryInt.UpdateFoundry += UpdateFoundry;
         _heatSlider = gameObject.GetComponent<Slider>();
     }
 

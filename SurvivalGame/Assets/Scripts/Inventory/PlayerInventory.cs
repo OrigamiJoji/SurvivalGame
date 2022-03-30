@@ -30,7 +30,6 @@ public class PlayerInventory : Inventory {
     }
     private void Awake() {
         GenerateInventory(new Slot[3, 5], 15);
-        PickupItem(new Workstump_(), 1);
     }
 
     private void ChangeItem() {

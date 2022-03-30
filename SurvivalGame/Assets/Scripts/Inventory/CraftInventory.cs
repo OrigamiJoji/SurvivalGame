@@ -32,8 +32,11 @@ public sealed class CraftInventory : Inventory {
             if (recipe.Schematic.SequenceEqual(craftingGridTypes)) {
                 Debug.Log("Crafted");
                 foreach (Slot slot in InventoryGrid) {
-                    slot.Item = new None();
-                    slot.Quantity = 0;
+                    slot.Quantity --;
+                    if(slot.Quantity <= 0) {
+                        slot.Item = new None();
+                        slot.Quantity = 0;
+                    }
                 }
                 _playerInventory.PickupItem(recipe.Product, recipe.Quantity);
                 OnChange();

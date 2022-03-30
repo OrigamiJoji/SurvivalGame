@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public sealed class Workstump : Interactable {
+public sealed class WorkstumpInt : Interactable {
     private CraftInventory ThisInv {
         get { return gameObject.GetComponent<CraftInventory>(); }
     }

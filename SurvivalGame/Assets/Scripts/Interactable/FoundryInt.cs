@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class Foundry : Interactable {
+public sealed class FoundryInt : Interactable {
     private FoundryInventory ThisInv {
         get { return gameObject.GetComponent<FoundryInventory>(); }
     }

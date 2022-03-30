@@ -7,10 +7,10 @@ public class Birch : Attackable {
 private Drop _drops;
 
 private void Start() {
-    _drops = new Drop(new Oak_Wood(), _minDrop, _maxDrop);
+    _drops = new Drop(new Birch_Wood(), _minDrop, _maxDrop);
     ItemDrops.Add(_drops);
     TypeReq = typeof(Axe);
-    TierReq = 1;
+    TierReq = 2;
     SpawnEntity(_treeHP);
 }
 }

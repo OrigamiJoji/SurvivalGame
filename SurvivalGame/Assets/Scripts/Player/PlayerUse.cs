@@ -71,7 +71,7 @@ public sealed class PlayerUse : MonoBehaviour {
             if (Physics.Raycast(_playerCamera.position, _playerCamera.forward, out RaycastHit hit, _playerInventory.EquippedItemToolStats.Range, _playerMask)) {
                 Debug.DrawRay(_playerCamera.position, _playerCamera.forward, Color.green, 1);
                 GameObject objectHit = hit.collider.gameObject;
-                if (objectHit.CompareTag("Attackable")) {
+                if (objectHit.CompareTag("Attackable") || objectHit.CompareTag("Interactable")) {
                     // if Attackable, do damage.
                     Attackable objectAttackable = objectHit.GetComponent<Attackable>();
                     objectAttackable.TakeDamage(_playerInventory);

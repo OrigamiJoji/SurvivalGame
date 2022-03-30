@@ -37,11 +37,11 @@ public abstract class Attackable : MonoBehaviour {
 
 
     private void Death(PlayerInventory attacker) {
-        gameObject.SetActive(false);
         foreach (Drop drop in ItemDrops) {
             var quantityDrops = UnityEngine.Random.Range(drop.MinQuantity, drop.MaxQuantity + 1);
             attacker.PickupItem(drop.DroppedItem, quantityDrops);
         }
+        Destroy(gameObject);
     }
 
     protected void SpawnEntity(float hitPoints) {

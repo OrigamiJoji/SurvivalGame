@@ -131,6 +131,10 @@ public class Iron_Pickaxe : Pickaxe {
 #endregion Pickaxe
 
 #region Items
+
+public sealed class Birch_Wood : Item, IFlammable {
+    public double SmeltTime { get { return 12; } }
+}
 public sealed class Oak_Wood : Item, IFlammable {
     public double SmeltTime { get { return 6; } }
 }

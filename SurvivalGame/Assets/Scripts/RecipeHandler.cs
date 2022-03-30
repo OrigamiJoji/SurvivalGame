@@ -30,14 +30,18 @@ public class RecipeHandler : MonoBehaviour {
         Type stick = new Stick().ItemType();
         Type none = new None().ItemType();
         Type stone = new Stone().ItemType();
-        Type wood = new Wood().ItemType();
+        Type wood = new Oak_Wood().ItemType();
         Type cBar = new Copper_Bar().ItemType();
+        Type iBar = new Iron_Bar().ItemType();
+        Type bWood = new Birch_Wood().ItemType();
 
         RecipeList.Add(new Recipe("Crafted_Axe", none, stick, none, none, stick, stone, none, stone, stone, new Crafted_Axe(), 1));
         RecipeList.Add(new Recipe("Copper_Axe", none, wood, none, none, wood, cBar, none, cBar, cBar, new Copper_Axe(), 1));
+        RecipeList.Add(new Recipe("Iron_Axe", none, bWood, none, none, bWood, iBar, none, iBar, iBar, new Iron_Axe(), 1));
 
         RecipeList.Add(new Recipe("Crafted_Pickaxe", none, stick, none, none, stick, none, stone, stone, stone, new Crafted_Pickaxe(), 1));
         RecipeList.Add(new Recipe("Copper_Pickaxe", none, wood, none, none, wood, none, cBar, cBar, cBar, new Copper_Pickaxe(), 1));
+        RecipeList.Add(new Recipe("Iron_Pickaxe", none, bWood, none, none, bWood, none, iBar, iBar, iBar, new Iron_Pickaxe(), 1));
     }
 }
 

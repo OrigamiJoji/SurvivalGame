@@ -14,7 +14,7 @@ public sealed class CraftingUI : MonoBehaviour, IPointerClickHandler {
 
     private void Awake() {
         CraftInventory.UpdateCraftingInventory += UpdateUI;
-        Workstump.UpdateCraft += UpdateCraft;
+        WorkstumpInt.UpdateCraft += UpdateCraft;
         _playerInventory = GameObject.Find("Player").GetComponent<PlayerInventory>();
         _quantityText = gameObject.GetComponentInChildren<Text>();
         _image = transform.Find("Image").GetComponent<Image>();

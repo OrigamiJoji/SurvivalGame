@@ -45,13 +45,18 @@ public sealed class PlayerMove : MonoBehaviour {
         GetAxis();
         moveDir = xInput * orientation.right + zInput * orientation.forward;
         CheckGround();
-        ApplyMovement();
+
         DragControl();
         SprintControl();
 
         if(Input.GetKeyDown(KeyCode.Space)) {
             Jump();
         }
+    }
+
+    private void FixedUpdate()
+    {
+        ApplyMovement();
     }
 
     private void GetAxis() {

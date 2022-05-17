@@ -96,7 +96,7 @@ public sealed class Iron_Axe : Axe {
 
 public abstract class Pickaxe : Tool {
     public Pickaxe() {
-        Range = 1f;
+        Range = 2f;
         AttackSpeed = 1.5f;
     }
 }
